@@ -1,5 +1,7 @@
 # 🧪 Visual Chemistry Explorer (VCE)
 
+![VCE Preview](screenshots/vce-preview.png)
+
 A 3D interactive chemistry visualization project that helps you explore atoms in a more visual and intuitive way.
 
 Chemistry is often taught using 2D diagrams and static images. I wanted to create something where atoms could be explored in a more interactive way — rotating models, viewing electron shells, and understanding atomic structures visually.
