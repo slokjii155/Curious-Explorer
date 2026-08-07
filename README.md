@@ -1,6 +1,27 @@
 # 🧪 Visual Chemistry Explorer (VCE)
+#File Over view
 
-![VCE Preview](screenshots/vce-preview.png)
+
+### 🧪 Atom Visualization
+![VCE 1](screenshots/VCE%201.png)
+
+### ⚛️ 3D Atom Model
+![VCE 2](screenshots/VCE%202.png)
+
+### 🌌 Interface View
+![VCE 3](screenshots/VCE%203.png)
+
+### 🔬 Quantum Orbital Model
+![VCE 4](screenshots/VCE%204.png)
+
+### 🧬 Periodic Table
+![VCE 5](screenshots/VCE%205.png)
+
+### ✨ Visual Effects
+![VCE 6](screenshots/VCE%206.png)
+
+### 🚀 Final View
+![VCE 7](screenshots/VCE%207.png)
 
 A 3D interactive chemistry visualization project that helps you explore atoms in a more visual and intuitive way.
 
