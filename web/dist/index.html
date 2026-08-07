@@ -5,119 +5,27 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>
 Visual Chemistry Explorer
 </title>
 
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-
-body{
-
-    overflow:hidden;
-
-    background:black;
-
-    font-family:
-    Arial, Helvetica, sans-serif;
-
-}
-
-
-
-canvas{
-
-    display:block;
-
-}
-
-
-
-/* ELEMENT SELECTOR */
-
-#ui{
-
-    position:absolute;
-
-    top:20px;
-
-    left:20px;
-
-    z-index:10;
-
-    color:white;
-
-}
-
-
-
-#elementSelect{
-
-    background:#111;
-
-    color:white;
-
-    border:1px solid #0088ff;
-
-    padding:12px 20px;
-
-    border-radius:10px;
-
-    font-size:16px;
-
-    outline:none;
-
-    cursor:pointer;
-
-}
-
-
-
-#elementSelect:hover{
-
-    border-color:#00ffff;
-
-}
-
-
-
-.title{
-
-    color:#00ffff;
-
-    font-size:22px;
-
-    margin-bottom:12px;
-
-    text-shadow:
-    0 0 10px cyan;
-
-}
-
-
-
-</style>
-
-
-  <script type="module" crossorigin src="/assets/index-COgLz9xu.js"></script>
+  <script type="module" crossorigin src="/assets/index-BS0-Y1kW.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-lbMEBnO6.css">
 </head>
 
 
 <body>
 
 
+<!-- =====================
+     TOP TOOLBAR
+===================== -->
 
-<div id="ui">
+
+<div id="topBar">
 
 
 <div class="title">
@@ -127,17 +35,165 @@ canvas{
 </div>
 
 
-<select id="elementSelect">
 
-</select>
+<div class="speedControl">
+
+
+<label>
+Electron Speed
+</label>
+
+
+<input
+
+id="speedSlider"
+
+type="range"
+
+min="0.2"
+
+max="3"
+
+step="0.1"
+
+value="1"
+
+/>
 
 
 </div>
 
 
 
-
 
+<select
+id="modelSelect"
+class="toolbarSelect"
+>
+
+
+<option value="bohr">
+
+⚛ Bohr Model
+
+</option>
+
+
+<option value="quantum">
+
+☁ Quantum Orbital Model
+
+</option>
+
+
+</select>
+
+
+
+
+
+<select
+id="elementSelect"
+class="toolbarSelect"
+>
+
+
+<option value="">
+
+Select Element
+
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+
+
+
+<!-- =====================
+     WELCOME SCREEN
+===================== -->
+
+
+<div id="welcomeScreen">
+
+
+<div class="welcome-orb orb1"></div>
+
+<div class="welcome-orb orb2"></div>
+
+<div class="welcome-orb orb3"></div>
+
+
+
+
+<div class="welcome-icon">
+
+⚛
+
+</div>
+
+
+
+
+<h1>
+
+Welcome to
+
+<span>
+
+Visual Chemistry Explorer
+
+</span>
+
+</h1>
+
+
+
+
+<p>
+
+Select an element to explore its atomic structure
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+<!-- =====================
+     PROPERTIES PANEL
+===================== -->
+
+
+<div
+
+id="propertiesPanel"
+
+class="properties-panel"
+
+style="display:none"
+
+>
+
+
+</div>
+
+
+
+
+
+
 
 
 </body>
