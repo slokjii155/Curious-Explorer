@@ -145,7 +145,7 @@ By combining programming and chemistry, I wanted to build something that makes l
 
 ## 👨‍💻 Author
 
-Built by **Prince**
+Built by **Prince Yadav**
 
 A project exploring the intersection of:
 
