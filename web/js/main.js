@@ -898,6 +898,56 @@ speedSlider.value
 
 
 
+//================================
+// SPEED CONTROL SHOW/HIDE
+//================================
+
+
+const speedControlWrap =
+document.getElementById(
+"speedControlWrap"
+);
+
+
+const speedToggleBtn =
+document.getElementById(
+"speedToggleBtn"
+);
+
+
+if(speedControlWrap && speedToggleBtn){
+
+
+speedToggleBtn.addEventListener(
+
+"click",
+
+()=>{
+
+const collapsed =
+speedControlWrap.classList.toggle(
+"collapsed"
+);
+
+speedToggleBtn.classList.toggle(
+"is-collapsed",
+collapsed
+);
+
+speedToggleBtn.setAttribute(
+"aria-pressed",
+String(!collapsed)
+);
+
+}
+
+);
+
+
+}
+
+
+
 
 
 
@@ -943,58 +993,6 @@ collapsed
 );
 
 panelToggleBtn.setAttribute(
-"aria-pressed",
-String(!collapsed)
-);
-
-}
-
-);
-
-
-}
-
-
-//================================
-// SPEED PANEL TOGGLE
-//================================
-// Mirrors the properties-panel toggle above, but for the
-// electron-speed control on the opposite (bottom-left) corner —
-// same tap-to-tuck-away behavior, own icon.
-
-
-const speedToggleBtn =
-document.getElementById(
-"speedToggleBtn"
-);
-
-
-if(speedToggleBtn){
-
-
-speedToggleBtn.addEventListener(
-
-"click",
-
-()=>{
-
-const speedPanel =
-document.getElementById(
-"speedPanel"
-);
-
-if(!speedPanel)
-return;
-
-const collapsed =
-speedPanel.classList.toggle("collapsed");
-
-speedToggleBtn.classList.toggle(
-"speed-hidden",
-collapsed
-);
-
-speedToggleBtn.setAttribute(
 "aria-pressed",
 String(!collapsed)
 );

@@ -9,12 +9,19 @@
 <meta name="theme-color" content="#050816">
 <title>Visual Chemistry Explorer</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 
 :root{
     --accent:#00d4ff;
     --accent-2:#7df9ff;
     --accent-deep:#0090c9;
+
+    --font-display:'Sora', 'Segoe UI', sans-serif;
+    --font-body:'Inter', 'Segoe UI', sans-serif;
 }
 
 *{
@@ -32,7 +39,9 @@ html,body{
 }
 
 body{
-    font-family:"Segoe UI", Arial, sans-serif;
+    font-family:var(--font-body);
+    font-weight:400;
+    letter-spacing:.1px;
     color:white;
 
     background:#050816;
@@ -153,9 +162,10 @@ body{
 }
 
 .pt-title{
+    font-family:var(--font-display);
     font-size:19px;
     font-weight:800;
-    letter-spacing:.5px;
+    letter-spacing:.3px;
 
     background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
     -webkit-background-clip:text;
@@ -601,9 +611,11 @@ body{
 }
 
 .pt-detail-body h3{
+    font-family:var(--font-display);
     text-align:center;
     font-size:23px;
     font-weight:800;
+    letter-spacing:.3px;
     margin-bottom:3px;
 
     background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
@@ -636,6 +648,7 @@ body{
 }
 
 .dt-val{
+    font-family:var(--font-display);
     font-size:19px;
     font-weight:800;
     color:var(--accent-2);
@@ -643,9 +656,10 @@ body{
 }
 
 .dt-lbl{
+    font-family:var(--font-display);
     font-size:10px;
     color:rgba(255,255,255,.5);
-    letter-spacing:.5px;
+    letter-spacing:1px;
     text-transform:uppercase;
     margin-top:3px;
 }
@@ -768,11 +782,12 @@ body{
 }
 
 .sp-caption{
+    font-family:var(--font-display);
     font-size:11px;
     font-weight:700;
-    letter-spacing:.6px;
+    letter-spacing:1.4px;
     text-transform:uppercase;
-    color:rgba(255,255,255,.45);
+    color:rgba(255,255,255,.5);
 }
 
 .sp-toggle{
@@ -873,9 +888,10 @@ body{
 /* ================= Text ================= */
 
 .side-panel h1{
-    font-size:24px;
+    font-family:var(--font-display);
+    font-size:25px;
     font-weight:800;
-    letter-spacing:1px;
+    letter-spacing:.4px;
     margin-bottom:8px;
 
     background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
@@ -904,7 +920,10 @@ body{
 }
 
 .chip{
+    font-family:var(--font-display);
     font-size:11px;
+    font-weight:600;
+    letter-spacing:.2px;
     padding:6px 12px;
     border-radius:999px;
     color:rgba(255,255,255,.8);
@@ -923,9 +942,10 @@ body{
     gap:9px;
     padding:14px 30px;
 
+    font-family:var(--font-display);
     font-size:14.5px;
     font-weight:700;
-    letter-spacing:.5px;
+    letter-spacing:.6px;
     color:#04121c;
     text-decoration:none;
 
