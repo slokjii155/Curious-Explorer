@@ -18,6 +18,7 @@
 ![VCE 6](screenshots/VCE%206.png)
 
 ![VCE 7](screenshots/VCE%207.png)
+<img width="1200" height="798" alt="image" src="https://github.com/user-attachments/assets/40af209d-74c2-48e2-9f00-867b1768806a" />
 
 A 3D interactive chemistry visualization project that helps you explore atoms in a more visual and intuitive way.
 
