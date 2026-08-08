@@ -1,7 +1,7 @@
 # 🧪 Visual Chemistry Explorer (VCE)
 #File Over view
 
-
+<img width="1200" height="798" alt="image" src="https://github.com/user-attachments/assets/40af209d-74c2-48e2-9f00-867b1768806a" />
 
 ![VCE 1](screenshots/VCE%201.png)
 
@@ -18,7 +18,7 @@
 ![VCE 6](screenshots/VCE%206.png)
 
 ![VCE 7](screenshots/VCE%207.png)
-<img width="1200" height="798" alt="image" src="https://github.com/user-attachments/assets/40af209d-74c2-48e2-9f00-867b1768806a" />
+
 
 A 3D interactive chemistry visualization project that helps you explore atoms in a more visual and intuitive way.
 
@@ -28,11 +28,11 @@ Chemistry is often taught using 2D diagrams and static images. I wanted to creat
 
 ---
 
-## ✨ What is VCE?
+## ✨ What is Curious Explorer?
 
-Visual Chemistry Explorer is a web-based 3D chemistry viewer built using **Three.js**.
+Curious Explorer is a web-based 3D models viewer built using **Three.js**.
 
-The project focuses on making atomic concepts easier to understand by combining chemistry concepts with real-time 3D graphics.
+The project focuses on making educational concepts easier to understand by combining varities of concepts like atomic model (bohr model and quantum model ) a with real-time 3D graphics.
 
 ---
 
