@@ -258,7 +258,7 @@ renderer.domElement
 
 controls.enableDamping=true;
 
-controls.dampingFactor=0.05;
+controls.dampingFactor=0.035;
 
 
 
@@ -308,6 +308,9 @@ let currentElement = null;
 
 
 let currentAtom = null;
+
+let atomEntranceStart = null;
+const ATOM_ENTRANCE_MS = 550;
 
 
 
@@ -384,6 +387,19 @@ panel.style.display="none";
 
 
 
+const toggleBtn =
+document.getElementById(
+"panelToggleBtn"
+);
+
+if(toggleBtn){
+
+toggleBtn.style.display="none";
+
+}
+
+
+
 }
 
 
@@ -436,6 +452,17 @@ panel.style.display="block";
 
 
 
+const toggleBtn =
+document.getElementById(
+"panelToggleBtn"
+);
+
+if(toggleBtn){
+
+toggleBtn.style.display="flex";
+
+}
+
 
 
 if(currentAtom){
@@ -462,6 +489,12 @@ createModel(
 element
 );
 
+
+
+// Smooth "grow-in" entrance instead of an instant pop —
+// the model scales up with an ease-out curve over ~550ms.
+currentAtom.scale.set(0.001, 0.001, 0.001);
+atomEntranceStart = performance.now();
 
 
 scene.add(
@@ -517,6 +550,7 @@ return;
 
 panel.innerHTML = `
 
+<div class="panel-fade">
 
 <div class="properties-title">
 
@@ -612,6 +646,8 @@ ${element.shells.join(",")}
 
 </div>
 
+
+</div>
 
 `;
 
@@ -864,6 +900,111 @@ speedSlider.value
 
 
 
+
+
+
+
+//================================
+// PROPERTIES PANEL TOGGLE
+//================================
+// Lets the person hide/show the atom-details card whenever
+// they want, independent of which element is selected.
+
+
+const panelToggleBtn =
+document.getElementById(
+"panelToggleBtn"
+);
+
+
+if(panelToggleBtn){
+
+
+panelToggleBtn.addEventListener(
+
+"click",
+
+()=>{
+
+const panel =
+document.getElementById(
+"propertiesPanel"
+);
+
+if(!panel)
+return;
+
+const collapsed =
+panel.classList.toggle("collapsed");
+
+panelToggleBtn.classList.toggle(
+"panel-hidden",
+collapsed
+);
+
+panelToggleBtn.setAttribute(
+"aria-pressed",
+String(!collapsed)
+);
+
+}
+
+);
+
+
+}
+
+
+//================================
+// SPEED PANEL TOGGLE
+//================================
+// Mirrors the properties-panel toggle above, but for the
+// electron-speed control on the opposite (bottom-left) corner —
+// same tap-to-tuck-away behavior, own icon.
+
+
+const speedToggleBtn =
+document.getElementById(
+"speedToggleBtn"
+);
+
+
+if(speedToggleBtn){
+
+
+speedToggleBtn.addEventListener(
+
+"click",
+
+()=>{
+
+const speedPanel =
+document.getElementById(
+"speedPanel"
+);
+
+if(!speedPanel)
+return;
+
+const collapsed =
+speedPanel.classList.toggle("collapsed");
+
+speedToggleBtn.classList.toggle(
+"speed-hidden",
+collapsed
+);
+
+speedToggleBtn.setAttribute(
+"aria-pressed",
+String(!collapsed)
+);
+
+}
+
+);
+
+
+}
 
 
 
@@ -1123,9 +1264,29 @@ time
 );
 
 
+// Ease the "grow-in" entrance so a freshly picked element
+// pops into view smoothly instead of appearing instantly.
+if(atomEntranceStart !== null){
+
+const t = Math.min(
+1,
+(performance.now() - atomEntranceStart) / ATOM_ENTRANCE_MS
+);
+
+const eased = 1 - Math.pow(1 - t, 3);
+const s = 0.001 + (1 - 0.001) * eased;
+
+currentAtom.scale.set(s, s, s);
+
+if(t >= 1){
+atomEntranceStart = null;
+currentAtom.scale.set(1, 1, 1);
+}
 
 }
 
+
+}
 
 
 renderer.render(

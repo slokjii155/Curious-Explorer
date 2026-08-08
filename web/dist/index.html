@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#050816">
-<title>Visual Chemistry Explorer</title>
+<meta name="theme-color" content="#050508">
+
+<title>Explorer</title>
 
 <style>
 
 :root{
-    --accent:#00d4ff;
-    --accent-2:#7df9ff;
-    --accent-deep:#0090c9;
+    --royal-black:#050508;
+    --glass:rgba(255,255,255,.05);
+    --glass-strong:rgba(255,255,255,.09);
+    --glass-border:rgba(255,255,255,.14);
+    --lavender:#b9a6ff;
+    --lavender-soft:#d9cfff;
+    --lavender-glow:rgba(185,166,255,.35);
 }
 
 *{
@@ -29,342 +35,340 @@ html,body{
     height:100dvh;
     overflow:hidden;
     overscroll-behavior:none;
+    background:var(--royal-black);
 }
 
 body{
     font-family:"Segoe UI", Arial, sans-serif;
-    color:white;
-
-    background:
-    radial-gradient(circle at 20% 15%, rgba(0,212,255,.14), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(0,144,201,.14), transparent 55%),
-    #050816;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
+    color:#fff;
     position:relative;
 
     padding:
-    max(16px, env(safe-area-inset-top))
-    max(16px, env(safe-area-inset-right))
-    max(16px, env(safe-area-inset-bottom))
-    max(16px, env(safe-area-inset-left));
+    max(20px, env(safe-area-inset-top))
+    max(20px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
 }
 
-/* ambient floating orbs */
-.bg-orb{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(4px);
-    opacity:.55;
-    animation: drift 10s ease-in-out infinite;
+#bgCanvas{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    display:block;
+}
+
+/* soft dark vignette so text stays readable over the 3D scene */
+.vignette{
+    position:fixed;
+    inset:0;
+    z-index:1;
     pointer-events:none;
-}
-.bg-orb.o1{ width:14px; height:14px; top:18%; left:12%; background:var(--accent); box-shadow:0 0 20px var(--accent); animation-duration:9s; }
-.bg-orb.o2{ width:9px; height:9px; top:70%; left:20%; background:var(--accent-2); box-shadow:0 0 16px var(--accent-2); animation-duration:12s; animation-delay:1s; }
-.bg-orb.o3{ width:11px; height:11px; top:25%; left:82%; background:var(--accent); box-shadow:0 0 18px var(--accent); animation-duration:11s; animation-delay:2s; }
-.bg-orb.o4{ width:7px; height:7px; top:78%; left:78%; background:var(--accent-2); box-shadow:0 0 14px var(--accent-2); animation-duration:8s; animation-delay:.5s; }
-.bg-orb.o5{ width:6px; height:6px; top:50%; left:6%; background:var(--accent-deep); box-shadow:0 0 12px var(--accent); animation-duration:13s; }
-.bg-orb.o6{ width:8px; height:8px; top:8%; left:55%; background:var(--accent-2); box-shadow:0 0 14px var(--accent-2); animation-duration:10s; animation-delay:1.5s; }
-
-@keyframes drift{
-    0%,100%{ transform:translateY(0) translateX(0); }
-    50%{ transform:translateY(-26px) translateX(10px); }
+    background:
+    radial-gradient(circle at 50% 38%, transparent 0%, rgba(5,5,8,.35) 60%, rgba(5,5,8,.85) 100%);
 }
 
-/* ================= Home Card ================= */
-
-.home-card{
+.page{
     position:relative;
     z-index:2;
-    width:min(560px, 90vw);
-    padding:56px 44px 48px;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:56px;
+
     text-align:center;
-
-    background:
-    linear-gradient(145deg, rgba(255,255,255,.16), rgba(9,18,38,.62) 45%, rgba(5,10,24,.78));
-
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-
-    border:1px solid rgba(0,212,255,.5);
-    border-top:1px solid rgba(255,255,255,.6);
-    border-radius:32px;
-
-    box-shadow:
-    0 40px 100px rgba(0,0,0,.75),
-    0 0 60px rgba(0,212,255,.3),
-    inset 0 1px 1px rgba(255,255,255,.4),
-    inset 0 -30px 50px rgba(0,0,0,.35),
-    inset 0 0 40px rgba(255,255,255,.06);
-
-    max-height:94dvh;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-
-    animation: cardRise .9s cubic-bezier(.2,.8,.2,1) both;
 }
 
-@keyframes cardRise{
-    from{ opacity:0; transform:translateY(30px) scale(.96); }
-    to{ opacity:1; transform:translateY(0) scale(1); }
+/* ===================== HERO ===================== */
+
+.brand{
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:6px;
+    text-transform:uppercase;
+    color:var(--lavender-soft);
+    text-shadow:0 0 18px var(--lavender-glow);
+    margin-bottom:14px;
 }
 
-.home-card::before{
-    content:"";
-    position:absolute;
-    width:280px;
-    height:280px;
-    top:-140px;
-    left:-120px;
-    background: radial-gradient(circle, rgba(255,255,255,.35), transparent 70%);
-    pointer-events:none;
-}
+.headline{
+    font-size:clamp(32px, 5vw, 56px);
+    font-weight:700;
+    letter-spacing:.5px;
+    line-height:1.15;
 
-/* ================= 3D Atom Logo ================= */
-
-.atom-stage{
-    width:150px;
-    height:150px;
-    margin:0 auto 30px;
-    perspective:700px;
-    position:relative;
-}
-
-.atom-core{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:34px;
-    height:34px;
-    margin:-17px 0 0 -17px;
-    border-radius:50%;
-
-    background: radial-gradient(circle at 35% 30%, #ffffff, var(--accent-2) 45%, var(--accent-deep));
-    box-shadow:
-    0 0 30px var(--accent),
-    0 10px 22px rgba(0,0,0,.5),
-    inset 0 4px 8px rgba(255,255,255,.7),
-    inset 0 -8px 14px rgba(0,60,90,.6);
-
-    animation: pulseCore 2.6s ease-in-out infinite;
-    z-index:3;
-}
-
-@keyframes pulseCore{
-    0%,100%{ transform:scale(1); }
-    50%{ transform:scale(1.12); }
-}
-
-.ring{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:150px;
-    height:150px;
-    margin:-75px 0 0 -75px;
-    border-radius:50%;
-    border:1.5px solid rgba(0,212,255,.55);
-    box-shadow:0 0 18px rgba(0,212,255,.35), inset 0 0 18px rgba(0,212,255,.15);
-    transform-style:preserve-3d;
-}
-
-.ring.r1{ transform:rotateX(75deg) rotateZ(0deg); animation:spin 6s linear infinite; }
-.ring.r2{ transform:rotateX(75deg) rotateZ(60deg); animation:spin 8s linear infinite reverse; }
-.ring.r3{ transform:rotateX(75deg) rotateZ(120deg); animation:spin 10s linear infinite; }
-
-@keyframes spin{
-    from{ transform:rotateX(75deg) rotateZ(var(--rot,0deg)) rotateY(0deg); }
-    to{ transform:rotateX(75deg) rotateZ(var(--rot,0deg)) rotateY(360deg); }
-}
-
-.ring .e{
-    position:absolute;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    top:50%;
-    left:-5px;
-    margin-top:-5px;
-
-    background: radial-gradient(circle at 35% 30%, #ffffff, var(--accent-2));
-    box-shadow:0 0 12px var(--accent), 0 0 20px var(--accent-2);
-}
-
-/* ================= Text ================= */
-
-.home-card h1{
-    font-size:34px;
-    font-weight:800;
-    letter-spacing:1.5px;
-    margin-bottom:10px;
-
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
+    background:linear-gradient(135deg, #ffffff 0%, var(--lavender-soft) 55%, var(--lavender) 100%);
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
 
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
+    filter:drop-shadow(0 2px 20px rgba(185,166,255,.2));
 }
 
-.home-card p.tagline{
-    font-size:15.5px;
-    color:rgba(255,255,255,.72);
+.subline{
+    margin-top:16px;
+    font-size:16px;
+    color:rgba(255,255,255,.65);
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
     line-height:1.6;
-    max-width:420px;
-    margin:0 auto 34px;
 }
 
-/* ================= Feature chips ================= */
+/* ===================== SUBJECT CARDS ===================== */
 
-.features{
+.subjects{
     display:flex;
-    justify-content:center;
-    gap:10px;
+    gap:22px;
     flex-wrap:wrap;
-    margin-bottom:36px;
+    justify-content:center;
 }
 
-.chip{
-    font-size:12.5px;
-    padding:7px 14px;
-    border-radius:999px;
-    color:rgba(255,255,255,.8);
-
-    background: rgba(0,212,255,.08);
-    border:1px solid rgba(0,212,255,.35);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.15);
-}
-
-/* ================= Launch Button ================= */
-
-.launch-btn{
+.subject-card{
     position:relative;
-    display:inline-flex;
+
+    width:220px;
+    padding:34px 24px;
+
+    display:flex;
+    flex-direction:column;
     align-items:center;
     gap:10px;
-    padding:16px 38px;
 
-    font-size:16px;
-    font-weight:700;
-    letter-spacing:.5px;
-    color:#04121c;
     text-decoration:none;
+    color:#fff;
 
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(22px) saturate(160%);
+    -webkit-backdrop-filter:blur(22px) saturate(160%);
+
+    border:1px solid var(--glass-border);
+    border-radius:22px;
+
+    box-shadow:
+    0 14px 40px rgba(0,0,0,.5),
+    inset 0 1px 1px rgba(255,255,255,.12);
+
+    cursor:pointer;
+
+    transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease;
+}
+
+.subject-card:hover,
+.subject-card:focus-visible{
+    transform:translateY(-6px);
+    border-color:rgba(185,166,255,.55);
+    box-shadow:
+    0 22px 55px rgba(0,0,0,.55),
+    0 0 40px var(--lavender-glow),
+    inset 0 1px 1px rgba(255,255,255,.18);
+    outline:none;
+}
+
+.subject-icon{
+    font-size:34px;
+    filter:drop-shadow(0 0 12px var(--lavender-glow));
+}
+
+.subject-name{
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:.3px;
+}
+
+.badge{
+    margin-top:6px;
+    padding:6px 16px;
     border-radius:999px;
-    border:1px solid rgba(255,255,255,.5);
-
-    background: linear-gradient(145deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
-
-    box-shadow:
-    0 16px 34px rgba(0,144,201,.45),
-    0 6px 14px rgba(0,0,0,.4),
-    inset 0 2px 3px rgba(255,255,255,.85),
-    inset 0 -10px 16px rgba(0,60,90,.45);
-
-    transition: transform .25s ease, box-shadow .25s ease;
-    overflow:hidden;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.4px;
 }
 
-.launch-btn::before{
-    content:"";
-    position:absolute;
-    top:0; left:0; right:0;
-    height:50%;
-    background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0));
+.badge.soon{
+    color:rgba(255,255,255,.55);
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.03);
+}
+
+.badge.go{
+    color:#0a0a12;
+    background:linear-gradient(135deg, var(--lavender-soft), var(--lavender));
+    box-shadow:0 0 22px var(--lavender-glow);
+}
+
+/* ===================== "COMING SOON" OVERLAY ===================== */
+
+.soon-overlay{
+    position:fixed;
+    inset:0;
+    z-index:40;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+
+    background:rgba(5,5,8,.6);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+
+    opacity:0;
     pointer-events:none;
+    transition:opacity .3s ease;
 }
 
-.launch-btn:hover{
-    transform: translateY(-4px) scale(1.03);
-    box-shadow:
-    0 22px 44px rgba(0,144,201,.55),
-    0 8px 18px rgba(0,0,0,.45),
-    inset 0 2px 3px rgba(255,255,255,.9),
-    inset 0 -10px 16px rgba(0,60,90,.45);
+.soon-overlay.show{
+    opacity:1;
+    pointer-events:auto;
 }
 
-.launch-btn:active{
-    transform: translateY(-1px) scale(.99);
+.soon-card{
+    position:relative;
+    width:min(90vw, 340px);
+    padding:38px 28px;
+    text-align:center;
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(24px) saturate(160%);
+    -webkit-backdrop-filter:blur(24px) saturate(160%);
+
+    border:1px solid var(--glass-border);
+    border-radius:24px;
+
+    box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 40px var(--lavender-glow);
 }
 
-.launch-btn .arrow{
-    transition: transform .25s ease;
+.soon-card h3{
+    font-size:22px;
+    margin-bottom:10px;
+    background:linear-gradient(135deg, #fff 0%, var(--lavender-soft) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
 }
 
-.launch-btn:hover .arrow{
-    transform: translateX(5px);
+.soon-card p{
+    font-size:14px;
+    color:rgba(255,255,255,.6);
+    line-height:1.6;
 }
 
-.footnote{
-    margin-top:22px;
-    font-size:12px;
-    color:rgba(255,255,255,.4);
-    letter-spacing:.5px;
+.soon-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+
+    width:30px;
+    height:30px;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--glass-border);
+    color:#fff;
+    cursor:pointer;
+    font-size:13px;
 }
 
-@media(max-width:520px){
-    .home-card{ padding:44px 26px 36px; }
-    .home-card h1{ font-size:26px; }
-    .atom-stage{ width:120px; height:120px; }
-    .ring{ width:120px; height:120px; margin:-60px 0 0 -60px; }
-    .launch-btn{ padding:15px 30px; font-size:15px; width:100%; justify-content:center; }
-}
+/* ===================== RESPONSIVE ===================== */
 
-/* short / landscape phones */
-@media(max-height:480px) and (orientation:landscape){
-    .home-card{ padding:24px 30px; }
-    .atom-stage{ width:90px; height:90px; margin-bottom:14px; }
-    .ring{ width:90px; height:90px; margin:-45px 0 0 -45px; }
-    .home-card h1{ font-size:22px; margin-bottom:6px; }
-    .home-card p.tagline{ font-size:13px; margin-bottom:16px; }
-    .features{ margin-bottom:16px; }
+@media(max-width:768px){
+
+    .page{ gap:40px; }
+
+    .brand{ letter-spacing:4px; font-size:13px; }
+
+    .subline{ font-size:14px; padding:0 8px; }
+
+    .subjects{
+        flex-direction:column;
+        align-items:center;
+        width:100%;
+        gap:14px;
+    }
+
+    .subject-card{
+        width:min(86vw, 340px);
+        padding:22px 22px;
+        flex-direction:row;
+        justify-content:flex-start;
+        gap:16px;
+        text-align:left;
+    }
+
+    .subject-name{ font-size:17px; }
+
+    .badge{ margin-top:0; margin-left:auto; }
+
 }
 
 </style>
 
+  <script type="module" crossorigin src="/assets/main-Cx7d_-1g.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-Dezn_h7o.js">
+  <link rel="modulepreload" crossorigin href="/assets/stars-BDhA2w0J.js">
 </head>
+
 
 <body>
 
-<div class="bg-orb o1"></div>
-<div class="bg-orb o2"></div>
-<div class="bg-orb o3"></div>
-<div class="bg-orb o4"></div>
-<div class="bg-orb o5"></div>
-<div class="bg-orb o6"></div>
+<canvas id="bgCanvas"></canvas>
+<div class="vignette"></div>
 
-<div class="home-card">
+<div class="page">
 
-    <div class="atom-stage">
-        <div class="ring r1"><div class="e"></div></div>
-        <div class="ring r2"><div class="e"></div></div>
-        <div class="ring r3"><div class="e"></div></div>
-        <div class="atom-core"></div>
-    </div>
+    <header class="hero">
 
-    <h1>Visual Chemistry Explorer</h1>
+        <div class="brand">Explorer</div>
 
-    <p class="tagline">
-        Journey inside the atom. Explore Bohr and Quantum Orbital models
-        in a stunning interactive 3D universe, built for curious minds.
-    </p>
+        <h1 class="headline">Explore. Visualize. Understand.</h1>
 
-    <div class="features">
-        <span class="chip">⚛ Bohr Model</span>
-        <span class="chip">☁ Quantum Orbitals</span>
-        <span class="chip">🧬 Full Periodic Table</span>
-    </div>
+        <p class="subline">
+        An immersive way to learn Physics, Chemistry and Mathematics — interactive, visual, and built to explore.
+        </p>
 
-    <a class="launch-btn" href="./explorer.html">
-        Enter Explorer <span class="arrow">→</span>
-    </a>
+    </header>
 
-    <div class="footnote">Click above to launch the 3D atomic simulator</div>
+    <main class="subjects">
+
+        <a class="subject-card" data-subject="physics" data-soon href="#" tabindex="0">
+            <div class="subject-icon">🪐</div>
+            <div class="subject-name">Physics</div>
+            <div class="badge soon">Coming Soon</div>
+        </a>
+
+        <a class="subject-card" data-subject="chemistry" href="./chemistry.html" tabindex="0">
+            <div class="subject-icon">⚛</div>
+            <div class="subject-name">Chemistry</div>
+            <div class="badge go">Explore Now</div>
+        </a>
+
+        <a class="subject-card" data-subject="math" data-soon href="#" tabindex="0">
+            <div class="subject-icon">📐</div>
+            <div class="subject-name">Mathematics</div>
+            <div class="badge soon">Coming Soon</div>
+        </a>
+
+    </main>
 
 </div>
+
+<div class="soon-overlay" id="soonOverlay">
+    <div class="soon-card">
+        <button class="soon-close" id="soonClose" type="button" aria-label="Close">✕</button>
+        <h3 id="soonTitle">Coming Soon</h3>
+        <p>We're building this experience. Check back soon.</p>
+    </div>
+</div>
+
 
 </body>
 </html>

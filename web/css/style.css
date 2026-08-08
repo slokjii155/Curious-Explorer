@@ -377,7 +377,7 @@ PROPERTIES GLASS CARD
     overflow:hidden;
 
 
-    transition: transform .35s ease, box-shadow .35s ease;
+    transition: transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, opacity .35s ease;
 
 
 }
@@ -395,6 +395,238 @@ PROPERTIES GLASS CARD
     inset 0 -25px 40px rgba(0,0,0,.35),
     inset 0 0 40px rgba(255,255,255,.08);
 
+}
+
+
+/* user can hide the panel on demand — kept independent of the
+   JS "display:block/none" state so the two never fight */
+
+.properties-panel.collapsed{
+
+    transform: translateX(24px) scale(.94);
+    opacity:0;
+    pointer-events:none;
+
+    transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+
+}
+
+
+/* floating pill that toggles the panel */
+
+.panel-toggle-btn{
+
+    position:absolute;
+
+    right:calc(35px + env(safe-area-inset-right));
+    bottom:calc(35px + env(safe-area-inset-bottom));
+
+    z-index:31;
+
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    font-size:19px;
+    color:white;
+
+    background:
+    linear-gradient(160deg, rgba(30,45,80,.6), rgba(10,16,32,.7));
+
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+    border:1px solid rgba(0,212,255,.55);
+    border-top:1px solid rgba(255,255,255,.6);
+
+    box-shadow:
+    0 12px 28px rgba(0,0,0,.5),
+    0 0 22px rgba(0,212,255,.3),
+    inset 0 1px 1px rgba(255,255,255,.3);
+
+    transition: transform .3s cubic-bezier(.4,0,.2,1), bottom .4s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
+}
+
+.panel-toggle-btn:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 16px 34px rgba(0,0,0,.55),
+    0 0 32px var(--accent),
+    inset 0 1px 1px rgba(255,255,255,.4);
+
+}
+
+.panel-toggle-btn:active{
+    transform:scale(.96);
+}
+
+.panel-toggle-btn .toggle-icon{
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    display:inline-block;
+}
+
+/* when the panel is hidden, drop the button down to where the
+   panel used to be so it doesn't float awkwardly in empty space,
+   and flip the arrow to show it now "opens" rather than "closes" */
+
+.panel-toggle-btn.panel-hidden{
+    bottom:calc(35px + env(safe-area-inset-bottom));
+}
+
+.panel-toggle-btn.panel-hidden .toggle-icon{
+    transform: rotate(180deg);
+}
+
+
+/* ==========================
+ELECTRON SPEED — FLOATING CONTROL
+(bottom-left, mirrors the panel toggle on the
+opposite corner — easiest spot for a thumb to
+reach on a phone without covering the atom)
+========================== */
+
+.speed-panel{
+
+    position:absolute;
+
+    left:calc(35px + env(safe-area-inset-left));
+    bottom:calc(35px + env(safe-area-inset-bottom));
+
+    z-index:31;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:10px 18px;
+
+    background:
+    linear-gradient(160deg, rgba(30,45,80,.55), rgba(10,16,32,.65));
+
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+    border:1px solid rgba(0,212,255,.5);
+    border-top: 1px solid rgba(255,255,255,.55);
+    border-left: 1px solid rgba(255,255,255,.25);
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.45),
+    0 0 25px rgba(0,212,255,.25),
+    inset 0 1px 1px rgba(255,255,255,.35),
+    inset 0 -12px 20px rgba(0,0,0,.3),
+    inset 0 0 20px rgba(255,255,255,.05);
+
+    border-radius:18px;
+
+    transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+}
+
+.speed-panel label{
+
+    font-size:14px;
+    color: rgba(255,255,255,.85);
+    text-shadow: 0 0 8px rgba(0,212,255,.35);
+    white-space:nowrap;
+
+}
+
+.speed-panel #speedSlider{
+
+    width:130px;
+    accent-color:var(--accent);
+    filter: drop-shadow(0 0 6px rgba(0,212,255,.6));
+
+}
+
+/* tucked away, same collapse motion as the properties panel
+   but sliding toward the left edge it lives on */
+.speed-panel.collapsed{
+
+    transform: translateX(-24px) scale(.94);
+    opacity:0;
+    pointer-events:none;
+
+    transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+
+}
+
+/* floating pill that toggles the speed control */
+
+.speed-toggle-btn{
+
+    position:absolute;
+
+    left:calc(35px + env(safe-area-inset-left));
+    bottom:calc(35px + env(safe-area-inset-bottom));
+
+    z-index:31;
+
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    font-size:19px;
+    color:white;
+
+    background:
+    linear-gradient(160deg, rgba(30,45,80,.6), rgba(10,16,32,.7));
+
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+    border:1px solid rgba(0,212,255,.55);
+    border-top:1px solid rgba(255,255,255,.6);
+
+    box-shadow:
+    0 12px 28px rgba(0,0,0,.5),
+    0 0 22px rgba(0,212,255,.3),
+    inset 0 1px 1px rgba(255,255,255,.3);
+
+    transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .25s ease, opacity .25s ease;
+}
+
+.speed-toggle-btn:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 16px 34px rgba(0,0,0,.55),
+    0 0 32px var(--accent),
+    inset 0 1px 1px rgba(255,255,255,.4);
+
+}
+
+.speed-toggle-btn:active{
+    transform:scale(.96);
+}
+
+.speed-toggle-btn .toggle-icon{
+    transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+    display:inline-block;
+}
+
+/* when tucked away, dim the bolt a touch so it still reads
+   as "tap to bring back" rather than a live control */
+.speed-toggle-btn.speed-hidden .toggle-icon{
+    opacity:.5;
+    transform:scale(.92);
 }
 
 
@@ -516,6 +748,31 @@ PROPERTIES GLASS CARD
     transition: background .25s ease;
 
 
+}
+
+/* every time the panel content is rebuilt (new element picked)
+   these freshly-created nodes fade/slide in on their own — no
+   JS animation loop needed, the browser plays it automatically
+   whenever new elements enter the DOM */
+
+.panel-fade{
+    animation: panelFadeIn .45s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.panel-fade .properties-item{
+    animation: panelFadeIn .4s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.panel-fade .properties-item:nth-of-type(1){ animation-delay:.04s; }
+.panel-fade .properties-item:nth-of-type(2){ animation-delay:.08s; }
+.panel-fade .properties-item:nth-of-type(3){ animation-delay:.12s; }
+.panel-fade .properties-item:nth-of-type(4){ animation-delay:.16s; }
+.panel-fade .properties-item:nth-of-type(5){ animation-delay:.20s; }
+.panel-fade .properties-item:nth-of-type(6){ animation-delay:.24s; }
+
+@keyframes panelFadeIn{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .properties-item:hover{
@@ -837,6 +1094,55 @@ MOBILE
 
     padding:20px;
 
+
+}
+
+
+.panel-toggle-btn{
+
+    right:calc(16px + env(safe-area-inset-right));
+    bottom:calc(16px + env(safe-area-inset-bottom));
+
+    width:44px;
+    height:44px;
+    font-size:17px;
+
+}
+
+
+.speed-panel{
+
+    left:calc(16px + env(safe-area-inset-left));
+    bottom:calc(16px + env(safe-area-inset-bottom));
+
+    padding:10px 14px;
+
+}
+
+
+.speed-panel label{
+
+    font-size:12.5px;
+
+}
+
+
+.speed-panel #speedSlider{
+
+    width:90px;
+    height:32px;
+
+}
+
+
+.speed-toggle-btn{
+
+    left:calc(16px + env(safe-area-inset-left));
+    bottom:calc(16px + env(safe-area-inset-bottom));
+
+    width:44px;
+    height:44px;
+    font-size:17px;
 
 }
 

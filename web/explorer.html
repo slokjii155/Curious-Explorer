@@ -39,36 +39,6 @@ Visual Chemistry Explorer
 
 
 
-<div class="speedControl">
-
-
-<label>
-Electron Speed
-</label>
-
-
-<input
-
-id="speedSlider"
-
-type="range"
-
-min="0.2"
-
-max="3"
-
-step="0.1"
-
-value="1"
-
-/>
-
-
-</div>
-
-
-
-
 <select
 id="modelSelect"
 class="toolbarSelect"
@@ -191,6 +161,85 @@ style="display:none"
 
 
 </div>
+
+
+<!-- =====================
+     PANEL SHOW/HIDE TOGGLE
+===================== -->
+
+<button
+
+id="panelToggleBtn"
+
+class="panel-toggle-btn"
+
+style="display:none"
+
+type="button"
+
+aria-label="Show or hide the atom details panel"
+
+aria-pressed="true"
+
+>
+
+<span class="toggle-icon">⟩</span>
+
+</button>
+
+
+<!-- =====================
+     ELECTRON SPEED CONTROL
+     (own floating widget, bottom-left — easy thumb
+     reach on phones, mirrors the panel toggle on the
+     opposite corner, and can be tucked away the same way)
+===================== -->
+
+<div
+
+id="speedPanel"
+
+class="speed-panel"
+
+>
+
+<label for="speedSlider">⚡ Electron Speed</label>
+
+<input
+
+id="speedSlider"
+
+type="range"
+
+min="0.2"
+
+max="3"
+
+step="0.1"
+
+value="1"
+
+/>
+
+</div>
+
+<button
+
+id="speedToggleBtn"
+
+class="speed-toggle-btn"
+
+type="button"
+
+aria-label="Show or hide the electron speed control"
+
+aria-pressed="true"
+
+>
+
+<span class="toggle-icon">⚡</span>
+
+</button>
 
 
 
