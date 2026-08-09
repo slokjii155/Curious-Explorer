@@ -46,10 +46,16 @@
 
 html,body{
     width:100%;
-    height:100%;
-    height:100dvh;
-    overflow:hidden;
-    overscroll-behavior:none;
+    min-height:100%;
+    min-height:100dvh;
+    /* Natural page scroll: the hero still fills the first screen
+       (see .page's min-height:100vh below), but the page itself can
+       grow — so Show More / additional homepage content is always
+       reachable by normal scrolling instead of being clipped. */
+    overflow-x:hidden;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:none;
     background:var(--royal-black);
     touch-action:pan-y;
 }
@@ -340,7 +346,8 @@ body{
     z-index:2;
 
     width:100%;
-    height:100%;
+    min-height:100%;
+    min-height:100dvh;
 
     display:flex;
     flex-direction:column;
@@ -389,10 +396,7 @@ body{
     letter-spacing:.2px;
     line-height:1.15;
 
-    background:linear-gradient(135deg, #ffffff 0%, var(--lavender-soft) 55%, var(--lavender) 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
+    color:rgba(255,255,255,.94);
 
     filter:drop-shadow(0 2px 20px rgba(185,166,255,.2));
 }
@@ -410,10 +414,18 @@ body{
 /* ===================== SUBJECT CARDS ===================== */
 
 .subjects{
-    display:flex;
+    display:grid;
+    grid-template-columns:repeat(3, 220px);
     gap:22px;
-    flex-wrap:wrap;
     justify-content:center;
+}
+
+.subjects-section{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:22px;
+    width:100%;
 }
 
 .subject-card{
@@ -447,7 +459,7 @@ body{
 
     overflow:hidden;
 
-    transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease;
+    transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease, opacity .35s ease;
 }
 
 .subject-card::before{
@@ -474,7 +486,8 @@ body{
     outline:none;
 }
 
-.subject-card.is-pressed{
+.subject-card.is-pressed,
+.subject-card:active{
     transform:translateY(-2px) scale(.98);
     border-color:rgba(185,166,255,.5);
     box-shadow:
@@ -493,6 +506,8 @@ body{
     font-size:19px;
     font-weight:700;
     letter-spacing:.3px;
+
+    color:rgba(255,255,255,.94);
 }
 
 .badge{
@@ -516,6 +531,153 @@ body{
     color:#0a0a12;
     background:linear-gradient(135deg, var(--lavender-soft), var(--lavender));
     box-shadow:0 0 22px var(--lavender-glow);
+}
+
+/* ===================== FAVORITE STAR ===================== */
+
+.fav-btn{
+    position:absolute;
+    top:12px;
+    right:12px;
+    z-index:3;
+
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:50%;
+
+    color:rgba(255,255,255,.55);
+    cursor:pointer;
+
+    transition:transform .25s cubic-bezier(.4,0,.2,1), background .25s ease, border-color .25s ease, color .25s ease;
+}
+
+.fav-btn:hover{
+    transform:scale(1.1);
+    color:rgba(255,255,255,.85);
+    border-color:rgba(185,166,255,.5);
+}
+
+.fav-btn:active{ transform:scale(.92); }
+
+.fav-btn svg{ width:15px; height:15px; }
+
+.fav-btn .fav-star-fill{
+    opacity:0;
+    transition:opacity .25s ease;
+}
+
+.fav-btn.is-fav{
+    background:rgba(185,166,255,.16);
+    border-color:rgba(185,166,255,.7);
+    color:var(--lavender-soft);
+}
+
+.fav-btn.is-fav .fav-star-fill{ opacity:1; }
+
+.fav-btn.is-fav svg{
+    filter:drop-shadow(0 0 6px var(--lavender-glow));
+}
+
+/* clear visual indication a subject is favorited, without altering the
+   card's existing design language */
+.subject-card.is-favorite{
+    border-color:rgba(185,166,255,.55);
+    box-shadow:
+    0 14px 40px rgba(0,0,0,.55),
+    0 0 30px var(--lavender-glow),
+    inset 0 1px 1px rgba(255,255,255,.16);
+}
+
+.subject-card.is-favorite .subject-icon{
+    filter:drop-shadow(0 0 16px var(--lavender-glow));
+}
+
+/* subjects hidden while the section is collapsed */
+.subject-card.is-collapsed-hidden{
+    display:none;
+}
+
+/* Show More reveal: starts here, then eases to the card's normal
+   opacity/transform via .subject-card's own transition */
+.subject-card.is-revealing{
+    opacity:0;
+    transform:translateY(10px) scale(.97);
+}
+
+/* Show Less collapse: eases here first, then is-collapsed-hidden
+   (display:none) is applied once the transition finishes */
+.subject-card.is-hiding{
+    opacity:0;
+    transform:translateY(6px) scale(.97);
+    pointer-events:none;
+}
+
+/* ===================== SHOW MORE / SHOW LESS ===================== */
+
+.subjects-more-wrap{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin-top:6px;
+}
+
+.show-more-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:12px 26px;
+
+    font-family:var(--font-display);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.4px;
+    color:#fff;
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(20px) saturate(170%);
+    -webkit-backdrop-filter:blur(20px) saturate(170%);
+
+    border:1px solid var(--glass-border);
+    border-radius:999px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.45),
+    inset 0 1px 1px rgba(255,255,255,.14);
+
+    cursor:pointer;
+
+    transition:transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+
+.show-more-btn:hover,
+.show-more-btn:focus-visible{
+    transform:translateY(-3px);
+    border-color:rgba(185,166,255,.55);
+    box-shadow:
+    0 16px 40px rgba(0,0,0,.5),
+    0 0 26px var(--lavender-glow),
+    inset 0 1px 1px rgba(255,255,255,.18);
+    outline:none;
+}
+
+.show-more-btn:active{
+    transform:translateY(0) scale(.97);
+}
+
+.show-more-btn .chevron{
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+
+.show-more-btn.is-expanded .chevron{
+    transform:rotate(180deg);
 }
 
 /* ===================== "COMING SOON" OVERLAY ===================== */
@@ -596,6 +758,17 @@ body{
     color:#fff;
     cursor:pointer;
     font-size:13px;
+
+    transition:transform .2s cubic-bezier(.4,0,.2,1), background .2s ease, border-color .2s ease;
+}
+
+.soon-close:hover{
+    background:rgba(255,255,255,.12);
+    border-color:rgba(185,166,255,.5);
+}
+
+.soon-close:active{
+    transform:scale(.9);
 }
 
 /* ===================== SIDE 3D GLASS MODELS ===================== */
@@ -706,6 +879,7 @@ body{
     .subline{ font-size:14px; padding:0 8px; }
 
     .subjects{
+        display:flex;
         flex-direction:column;
         align-items:center;
         width:100%;
@@ -755,7 +929,7 @@ body{
 
 </style>
 
-  <script type="module" crossorigin src="/assets/main-9mwvcuLM.js"></script>
+  <script type="module" crossorigin src="/assets/main-D19dlGaE.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-Dezn_h7o.js">
 </head>
 
@@ -1031,27 +1205,24 @@ body{
 
     </header>
 
-    <main class="subjects">
+    <div class="subjects-section">
 
-        <a class="subject-card" data-subject="physics" data-soon href="#" tabindex="0">
-            <div class="subject-icon">🪐</div>
-            <div class="subject-name">Physics</div>
-            <div class="badge soon">Coming Soon</div>
-        </a>
+        <main class="subjects" id="subjectsGrid">
+            <!-- Subject cards are rendered by ./js/subjects.js from a shared
+                 subject list, so favorites/ordering/collapse can be applied
+                 without hand-maintaining markup for every subject. -->
+        </main>
 
-        <a class="subject-card" data-subject="chemistry" href="./chemistry.html" tabindex="0">
-            <div class="subject-icon">⚛</div>
-            <div class="subject-name">Chemistry</div>
-            <div class="badge go">Explore Now</div>
-        </a>
+        <div class="subjects-more-wrap">
+            <button class="show-more-btn" id="subjectsMoreBtn" type="button" aria-expanded="false">
+                <span id="subjectsMoreLabel">Show More</span>
+                <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </div>
 
-        <a class="subject-card" data-subject="math" data-soon href="#" tabindex="0">
-            <div class="subject-icon">📐</div>
-            <div class="subject-name">Mathematics</div>
-            <div class="badge soon">Coming Soon</div>
-        </a>
-
-    </main>
+    </div>
 
 </div>
 
@@ -1136,6 +1307,7 @@ body{
 })();
 </script>
 
+<script src="./js/letterGlow.js"></script>
 
 </body>
 </html>

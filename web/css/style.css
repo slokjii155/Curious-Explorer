@@ -1,8 +1,11 @@
 :root{
 
-    --accent:#00d4ff;
-    --accent-2:#7df9ff;
-    --accent-deep:#0090c9;
+    /* Solo Leveling-inspired dark purple / indigo / lavender palette,
+       with cool electric blue kept strictly as a minor secondary accent */
+    --accent:#9b6bff;
+    --accent-2:#cbb6ff;
+    --accent-deep:#3c1670;
+    --accent-blue:#5b8cff;
 
     --glass-hi: rgba(255,255,255,.22);
     --glass-lo: rgba(8,14,30,.55);
@@ -44,13 +47,14 @@ body{
     -webkit-text-size-adjust:100%;
 
     font-family:
+    "Inter",
     "Segoe UI",
     Arial,
     sans-serif;
 
     background:
-    radial-gradient(circle at 20% 15%, rgba(0,212,255,.10), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(0,144,201,.10), transparent 55%),
+    radial-gradient(circle at 20% 15%, rgba(155,107,255,.10), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(60,22,112,.10), transparent 55%),
     #050816;
 
     color:white;
@@ -109,18 +113,14 @@ TOP BAR
     letter-spacing:2px;
 
 
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: rgba(255,255,255,.94);
 
     text-shadow:
 
-    0 0 15px rgba(0,212,255,.5),
-    0 0 30px rgba(0,212,255,.25);
+    0 0 15px rgba(155,107,255,.5),
+    0 0 30px rgba(155,107,255,.25);
 
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
-
 
 }
 
@@ -155,7 +155,7 @@ GLASS BUTTONS
 
     border:
 
-    1px solid rgba(0,212,255,.5);
+    1px solid rgba(155,107,255,.5);
     border-top: 1px solid rgba(255,255,255,.55);
     border-left: 1px solid rgba(255,255,255,.25);
 
@@ -165,7 +165,7 @@ GLASS BUTTONS
 
 
     0 10px 30px rgba(0,0,0,.45),
-    0 0 25px rgba(0,212,255,.25),
+    0 0 25px rgba(155,107,255,.25),
     inset 0 1px 1px rgba(255,255,255,.35),
     inset 0 -12px 20px rgba(0,0,0,.3),
     inset 0 0 20px rgba(255,255,255,.05);
@@ -265,6 +265,10 @@ GLASS BUTTONS
 }
 
 
+.speed-toggle-btn{ order:1; }
+.speedControl{ order:2; }
+
+
 .speedControl{
 
 
@@ -319,12 +323,12 @@ GLASS BUTTONS
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
 
-    border:1px solid rgba(0,212,255,.5);
+    border:1px solid rgba(155,107,255,.5);
     border-top:1px solid rgba(255,255,255,.55);
 
     box-shadow:
     0 10px 26px rgba(0,0,0,.45),
-    0 0 20px rgba(0,212,255,.22),
+    0 0 20px rgba(155,107,255,.22),
     inset 0 1px 1px rgba(255,255,255,.3);
 
     transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .25s ease, color .25s ease;
@@ -390,7 +394,7 @@ GLASS BUTTONS
 
     font-size:14px;
     color: rgba(255,255,255,.85);
-    text-shadow: 0 0 8px rgba(0,212,255,.35);
+    text-shadow: 0 0 8px rgba(155,107,255,.35);
 
 }
 
@@ -403,7 +407,7 @@ GLASS BUTTONS
 
     accent-color:var(--accent);
 
-    filter: drop-shadow(0 0 6px rgba(0,212,255,.6));
+    filter: drop-shadow(0 0 6px rgba(155,107,255,.6));
 
 }
 
@@ -469,7 +473,7 @@ PROPERTIES GLASS CARD
 
     border:
 
-    1px solid rgba(0,212,255,.55);
+    1px solid rgba(155,107,255,.55);
     border-top: 1px solid rgba(255,255,255,.6);
 
 
@@ -484,7 +488,7 @@ PROPERTIES GLASS CARD
     0 30px 80px rgba(0,0,0,.75),
 
 
-    0 0 45px rgba(0,212,255,.35),
+    0 0 45px rgba(155,107,255,.35),
 
     inset 0 1px 1px rgba(255,255,255,.4),
     inset 0 -25px 40px rgba(0,0,0,.35),
@@ -508,7 +512,7 @@ PROPERTIES GLASS CARD
     box-shadow:
 
     0 36px 90px rgba(0,0,0,.8),
-    0 0 60px rgba(0,212,255,.45),
+    0 0 60px rgba(155,107,255,.45),
     inset 0 1px 1px rgba(255,255,255,.45),
     inset 0 -25px 40px rgba(0,0,0,.35),
     inset 0 0 40px rgba(255,255,255,.08);
@@ -561,12 +565,12 @@ PROPERTIES GLASS CARD
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
 
-    border:1px solid rgba(0,212,255,.55);
+    border:1px solid rgba(155,107,255,.55);
     border-top:1px solid rgba(255,255,255,.6);
 
     box-shadow:
     0 12px 28px rgba(0,0,0,.5),
-    0 0 22px rgba(0,212,255,.3),
+    0 0 22px rgba(155,107,255,.3),
     inset 0 1px 1px rgba(255,255,255,.3);
 
     transition: transform .3s cubic-bezier(.4,0,.2,1), bottom .4s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
@@ -648,7 +652,7 @@ PROPERTIES GLASS CARD
     position:absolute;
     left:0; right:0; bottom:0;
     height:45%;
-    background: linear-gradient(0deg, rgba(0,212,255,.10), transparent);
+    background: linear-gradient(0deg, rgba(155,107,255,.10), transparent);
     pointer-events:none;
 
 }
@@ -677,10 +681,7 @@ PROPERTIES GLASS CARD
 
     font-weight:800;
 
-    background: linear-gradient(135deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: rgba(255,255,255,.94);
 
     letter-spacing:4px;
 
@@ -691,10 +692,9 @@ PROPERTIES GLASS CARD
     text-shadow:
 
 
-    0 0 25px rgba(0,212,255,.55);
+    0 0 25px rgba(155,107,255,.55);
 
     filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
-
 
 }
 
@@ -752,7 +752,7 @@ PROPERTIES GLASS CARD
 
 .properties-item:hover{
 
-    background: linear-gradient(90deg, rgba(0,212,255,.08), transparent);
+    background: linear-gradient(90deg, rgba(155,107,255,.08), transparent);
 
 }
 
@@ -831,9 +831,9 @@ WELCOME SCREEN
     text-shadow:
 
 
-    0 0 20px #00d4ff,
+    0 0 20px #9b6bff,
 
-    0 0 50px #00d4ff;
+    0 0 50px #9b6bff;
 
 
 }
@@ -850,7 +850,7 @@ WELCOME SCREEN
     background-clip: text;
     color: transparent;
 
-    filter: drop-shadow(0 0 18px rgba(0,212,255,.6));
+    filter: drop-shadow(0 0 18px rgba(155,107,255,.6));
 
 }
 
@@ -901,25 +901,25 @@ WELCOME SCREEN
 
     background:
 
-    radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), rgba(0,212,255,.15) 55%, rgba(0,144,201,.25));
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), rgba(155,107,255,.15) 55%, rgba(60,22,112,.25));
 
-    color:#00d4ff;
+    color:#9b6bff;
 
 
     border:
 
-    2px solid #00d4ff;
+    2px solid #9b6bff;
     border-top: 2px solid rgba(255,255,255,.8);
 
 
     box-shadow:
 
 
-    0 0 40px #00d4ff,
+    0 0 40px #9b6bff,
     0 18px 40px rgba(0,0,0,.5),
     inset 0 6px 14px rgba(255,255,255,.35),
     inset 0 -14px 24px rgba(0,90,130,.5),
-    inset 0 0 30px #00d4ff;
+    inset 0 0 30px #9b6bff;
 
 
 

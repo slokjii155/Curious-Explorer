@@ -28,7 +28,7 @@ export function createHomeScreen(scene){
     const nucleusMat =
     new THREE.MeshBasicMaterial({
 
-        color:0x00d9ff,
+        color:0x9b6bff,
 
         transparent:true,
 
@@ -79,7 +79,7 @@ export function createHomeScreen(scene){
                 color:
                 i%2?
                 0x8a5cff:
-                0x00d4ff,
+                0x5b8cff,
 
 
                 transparent:true,
@@ -166,7 +166,7 @@ export function createHomeScreen(scene){
     const particleMat =
     new THREE.PointsMaterial({
 
-        color:0x66ffff,
+        color:0xcbb6ff,
 
         size:0.025,
 

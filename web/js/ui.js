@@ -95,7 +95,7 @@ export function createInfoPanel(){
 
     font-family:
 
-    Arial, sans-serif;
+    "Inter", Arial, sans-serif;
 
 
 
