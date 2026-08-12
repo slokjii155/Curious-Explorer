@@ -22,6 +22,7 @@
     --accent-2:#cbb6ff;
     --accent-deep:#3c1670;
     --accent-blue:#5b8cff;
+    --accent-teal:#57e0c2;
 
     --font-display:'Sora', 'Segoe UI', sans-serif;
     --font-body:'Inter', 'Segoe UI', sans-serif;
@@ -717,29 +718,24 @@ body{
 }
 
 /* ================= 3D Atom Logo (unchanged behaviour) =================
-   Now used inside the Visualizer card (.mc-visualizer .atom-stage--sm)
-   instead of the old standalone side panel. */
+   Now used inside the Visualizer card's display case
+   (.mc-visualizer .mc-stage .atom-stage--sm). */
 
-.mc-visual{
-    display:flex;
-    justify-content:center;
-}
-
-/* Scoped to .mc-visual so this always wins over the base .atom-stage
-   sizing below, regardless of stylesheet order. */
-.mc-visual .atom-stage{
+/* Scoped to .mc-visualizer .mc-stage so this always wins over the base
+   .atom-stage sizing below, regardless of stylesheet order. */
+.mc-visualizer .mc-stage .atom-stage{
     width:64px;
     height:64px;
-    margin:0 0 6px;
+    margin:0;
 }
 
-.mc-visual .atom-core{
+.mc-visualizer .mc-stage .atom-core{
     width:16px;
     height:16px;
     margin:-8px 0 0 -8px;
 }
 
-.mc-visual .ring{
+.mc-visualizer .mc-stage .ring{
     width:64px;
     height:64px;
     margin:-32px 0 0 -32px;
@@ -848,41 +844,444 @@ body{
     animation: cardRise .9s .15s cubic-bezier(.2,.8,.2,1) both;
 }
 
+/* ---- responsive grid: many per row on desktop, fewer on tablet,
+   single column on mobile. Cards are capped at --mc-card-max so the
+   grid gains columns instead of growing oversized cards on wide
+   screens. ---- */
 .models-grid{
+    --mc-card-max: 300px;
+
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fill, minmax(220px, var(--mc-card-max)));
+    justify-content:center;
+    gap:20px;
     margin-top:18px;
 }
 
-.model-card{
-    position:relative;
+/* ================= Filter bar ================= */
+/* Premium transparent glossy glass, matching the display-case
+   language of the cards below. Sits top-left of the section, ahead
+   of the grid, and never holds model data of its own — see the
+   comment on #modelsFilterBar in the markup. */
 
-    padding:22px 20px 20px;
-    border-radius:20px;
+.mc-filterbar{
+    display:flex;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:20px;
+}
+
+.mc-filter-field{
+    position:relative;
 
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:6px;
+
+    min-width:168px;
+}
+
+.mc-filter-field label{
+    font-family:var(--font-display);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.5);
+    padding-left:2px;
+}
+
+.mc-filter-select{
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:100%;
+    padding:10px 34px 10px 14px;
+    border-radius:13px;
+
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:600;
+    color:rgba(255,255,255,.92);
+
+    background: linear-gradient(150deg, rgba(255,255,255,.12), rgba(9,18,38,.5) 55%, rgba(5,10,24,.62));
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+
+    border:1px solid rgba(155,107,255,.32);
+    border-top:1px solid rgba(255,255,255,.4);
+
+    box-shadow:
+    0 10px 26px rgba(0,0,0,.4),
+    inset 0 1px 1px rgba(255,255,255,.2);
+
+    transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    cursor:pointer;
+}
+
+.mc-filter-select:hover{
+    border-color:rgba(155,107,255,.55);
+}
+
+.mc-filter-select:focus-visible{
+    outline:none;
+    border-color:rgba(155,107,255,.75);
+    box-shadow:
+    0 10px 26px rgba(0,0,0,.4),
+    0 0 0 3px rgba(155,107,255,.28),
+    inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+.mc-filter-select:disabled{
+    cursor:not-allowed;
+    color:rgba(255,255,255,.35);
+    background: linear-gradient(150deg, rgba(255,255,255,.05), rgba(9,18,38,.4) 55%, rgba(5,10,24,.5));
+}
+
+.mc-filter-select option{
+    background:#0b1224;
+    color:#fff;
+}
+
+.mc-filter-arrow{
+    position:absolute;
+    right:13px;
+    bottom:11px;
+    font-size:10px;
+    color:rgba(255,255,255,.45);
+    pointer-events:none;
+}
+
+.mc-filter-clear{
+    padding:10px 16px;
+    border-radius:13px;
+
+    font-family:var(--font-display);
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.75);
+
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.16);
+
+    cursor:pointer;
+    transition: border-color .25s ease, color .25s ease, background .25s ease;
+}
+
+.mc-filter-clear:hover,
+.mc-filter-clear:focus-visible{
+    color:#fff;
+    border-color:rgba(255,255,255,.35);
+    background: rgba(255,255,255,.08);
+    outline:none;
+}
+
+.mc-filter-empty{
+    padding:26px 18px;
+    margin-bottom:6px;
+    border-radius:16px;
+    text-align:center;
+
+    font-size:13px;
+    color:rgba(255,255,255,.55);
+
+    background: rgba(255,255,255,.03);
+    border:1px dashed rgba(255,255,255,.14);
+}
+
+.mc-filter-empty-clear{
+    color: var(--accent-2);
+    font-weight:700;
+    text-decoration:underline;
+    text-underline-offset:2px;
+    cursor:pointer;
+}
+
+@media(max-width:520px){
+    .mc-filterbar{ gap:10px; }
+    .mc-filter-field{ min-width:0; flex:1 1 120px; }
+    .mc-filter-clear{ flex:1 0 100%; text-align:center; }
+}
+
+/* ================= Premium model cards =================
+   Each card is a "glass display case" for exactly one model:
+   a lit glass box on top (.mc-preview, holding a small rotating
+   crystal that stands in for the model's 3D subject) sitting over
+   a plinth of card details. Subject sets the case's accent color
+   via the --card-accent custom property, written inline per card
+   by renderModelCards() below — nothing here is hard-coded to a
+   specific subject or model. */
+
+.model-card{
+    --card-accent: var(--accent);
+    --tiltX: 0deg;
+    --tiltY: 0deg;
+
+    position:relative;
+
+    width:100%;
+    max-width:var(--mc-card-max);
+    margin:0 auto;
+
+    border-radius:22px;
+
+    display:flex;
+    flex-direction:column;
     text-align:left;
     text-decoration:none;
     color:inherit;
 
-    background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(9,18,38,.55) 45%, rgba(5,10,24,.7));
+    background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(9,18,38,.58) 45%, rgba(5,10,24,.74));
 
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
 
-    border:1px solid rgba(155,107,255,.35);
-    border-top:1px solid rgba(255,255,255,.45);
+    border:1px solid rgba(155,107,255,.32);
+    border-top:1px solid rgba(255,255,255,.42);
 
     box-shadow:
     0 18px 44px rgba(0,0,0,.55),
-    0 0 26px rgba(155,107,255,.14),
-    inset 0 1px 1px rgba(255,255,255,.22);
+    0 0 26px rgba(155,107,255,.12),
+    inset 0 1px 1px rgba(255,255,255,.2);
 
-    transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease, border-color .3s ease;
+    transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateY(0) scale(1);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .4s ease;
+    will-change: transform;
 }
+
+/* .model-card sets display:flex above, which otherwise beats the
+   browser's low-specificity default [hidden]{display:none} rule by
+   source order — this makes the "hidden" attribute (used to hide the
+   Visualizer card when it's filtered out) actually take effect. */
+.model-card[hidden]{
+    display:none;
+}
+
+/* -------- preview: the glass "display case" -------- */
+
+.mc-preview{
+    position:relative;
+    height:128px;
+    margin:14px 14px 0;
+    border-radius:16px;
+    overflow:hidden;
+
+    background:
+    radial-gradient(120% 140% at 26% 18%, color-mix(in srgb, var(--card-accent) 30%, transparent), transparent 62%),
+    linear-gradient(165deg, rgba(255,255,255,.10), rgba(5,10,24,.55));
+
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.28),
+    inset 0 -22px 30px rgba(0,0,0,.4);
+}
+
+/* ambient glow seated behind the crystal, like a lit case floor */
+.mc-preview::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-10px;
+    width:74%;
+    height:36px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--card-accent) 65%, transparent), transparent 75%);
+    filter: blur(2px);
+    opacity:.55;
+}
+
+/* glass sheen sweep — sits still by default, glides across on hover
+   for available cards (tracked to the pointer via --mx) */
+.mc-preview::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(115deg, transparent 34%, rgba(255,255,255,.30) 49%, transparent 64%);
+    transform: translateX(calc(var(--mx, 50%) - 50%));
+    opacity:.18;
+    transition: opacity .4s ease;
+    pointer-events:none;
+}
+
+.mc-stage{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:340px;
+}
+
+/* the "3D scientific object" — an abstract faceted crystal built
+   from stacked, rotated panes so it reads as a solid object without
+   needing a per-model 3D asset yet. Spins slowly at rest. */
+.mc-crystal{
+    position:relative;
+    width:52px;
+    height:52px;
+    transform-style:preserve-3d;
+    animation: crystalSpin 10s linear infinite;
+}
+
+.mc-crystal .facet{
+    position:absolute;
+    inset:0;
+    border-radius:10px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--card-accent) 85%, white 15%), color-mix(in srgb, var(--card-accent) 55%, #050816 45%));
+    border:1px solid rgba(255,255,255,.5);
+    box-shadow: inset 0 2px 4px rgba(255,255,255,.5), inset 0 -8px 12px rgba(0,0,0,.35);
+    opacity:.88;
+}
+
+.mc-crystal .facet.f1{ transform:rotateY(0deg) translateZ(20px); }
+.mc-crystal .facet.f2{ transform:rotateY(90deg) translateZ(20px); }
+.mc-crystal .facet.f3{ transform:rotateY(180deg) translateZ(20px); }
+.mc-crystal .facet.f4{ transform:rotateY(270deg) translateZ(20px); }
+.mc-crystal .facet.f5{ transform:rotateX(90deg) translateZ(20px); opacity:.6; }
+
+@keyframes crystalSpin{
+    from{ transform:rotateY(0deg) rotateX(8deg); }
+    to{ transform:rotateY(360deg) rotateX(8deg); }
+}
+
+/* subject glyph rides in front, tagged to the case like a specimen
+   label rather than centered over the crystal */
+.mc-tag{
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:26px;
+    height:26px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+
+    background: rgba(5,10,24,.55);
+    border:1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(6px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+/* -------- body: name / meta / description -------- */
+
+.mc-body{
+    padding:14px 18px 4px;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.mc-name{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.2px;
+    line-height:1.25;
+
+    color: rgba(255,255,255,.95);
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+}
+
+.mc-meta{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px 8px;
+    font-size:11px;
+}
+
+.mc-meta-subject{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color: color-mix(in srgb, var(--card-accent) 78%, white 22%);
+}
+
+.mc-meta-subject::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background: var(--card-accent);
+    box-shadow: 0 0 8px var(--card-accent);
+}
+
+.mc-meta-topic{
+    color:rgba(255,255,255,.5);
+}
+
+.mc-meta-class{
+    margin-left:auto;
+    flex:0 0 auto;
+
+    font-family:var(--font-display);
+    font-weight:700;
+    letter-spacing:.3px;
+    font-size:10px;
+    text-transform:uppercase;
+    white-space:nowrap;
+
+    padding:3px 8px;
+    border-radius:999px;
+
+    color:rgba(255,255,255,.6);
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14);
+}
+
+.mc-desc{
+    font-size:12.5px;
+    line-height:1.5;
+    color:rgba(255,255,255,.62);
+}
+
+/* -------- action -------- */
+
+.mc-footer{
+    margin-top:auto;
+    padding:14px 18px 18px;
+}
+
+.mc-action{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    padding:10px 14px;
+    border-radius:12px;
+
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:.4px;
+}
+
+.mc-action.is-available{
+    color:#04121c;
+    background: linear-gradient(145deg, var(--accent-2), var(--accent) 70%);
+    border:1px solid rgba(255,255,255,.5);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 8px 20px rgba(155,107,255,.28);
+    transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.mc-action.is-soon{
+    color:rgba(255,255,255,.42);
+    text-transform:uppercase;
+    background: rgba(255,255,255,.03);
+    border:1px dashed rgba(255,255,255,.18);
+    letter-spacing:.7px;
+    font-size:10.5px;
+}
+
+/* -------- available card: lift, tilt, and glow follow the cursor -------- */
 
 .model-card.mc-active{
     cursor:pointer;
@@ -890,107 +1289,71 @@ body{
 
 .model-card.mc-active:hover,
 .model-card.mc-active:focus-visible{
-    transform:translateY(-5px);
-    border-color:rgba(155,107,255,.6);
+    transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateY(-7px) scale(1.015);
+    border-color: color-mix(in srgb, var(--card-accent) 60%, rgba(255,255,255,.55));
     box-shadow:
-    0 26px 58px rgba(0,0,0,.6),
-    0 0 36px rgba(155,107,255,.32),
+    0 30px 62px rgba(0,0,0,.6),
+    0 0 40px color-mix(in srgb, var(--card-accent) 40%, transparent),
     inset 0 1px 1px rgba(255,255,255,.3);
 }
+
+.model-card.mc-active:hover .mc-preview::after{
+    opacity:.5;
+}
+
+.model-card.mc-active:hover .mc-crystal{
+    animation-duration:3s;
+}
+
+.model-card.mc-active:hover .mc-preview::before{
+    opacity:.8;
+}
+
+/* -------- coming-soon card: same case, deliberately quieter -------- */
 
 .model-card.mc-soon{
     cursor:default;
 }
 
-.mc-icon{
-    font-size:24px;
-    line-height:1;
+.model-card.mc-soon .mc-preview{
+    filter:grayscale(.55) brightness(.8);
 }
 
-.mc-name{
-    font-family:var(--font-display);
-    font-size:15px;
-    font-weight:800;
-    letter-spacing:.3px;
-
-    color: rgba(255,255,255,.94);
-
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+.model-card.mc-soon .mc-crystal{
+    animation-duration:22s;
+    opacity:.7;
 }
 
-.mc-desc{
-    font-size:12.5px;
-    line-height:1.5;
-    color:rgba(255,255,255,.65);
-    flex:1 0 auto;
+.model-card.mc-soon .mc-name{
+    color:rgba(255,255,255,.78);
 }
 
-.mc-items{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
+.model-card.mc-soon:hover{
+    border-color:rgba(255,255,255,.22);
+    box-shadow:
+    0 20px 46px rgba(0,0,0,.55),
+    0 0 22px rgba(255,255,255,.06),
+    inset 0 1px 1px rgba(255,255,255,.2);
 }
 
-.mc-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-
-    padding:9px 12px;
-    border-radius:12px;
-
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.09);
+@media (prefers-reduced-motion: reduce){
+    .mc-crystal{ animation:none; }
+    .model-card{ transition:box-shadow .3s ease, border-color .3s ease; }
 }
 
-.mc-item-name{
-    font-size:12.5px;
-    font-weight:600;
-    letter-spacing:.1px;
-    color:rgba(255,255,255,.82);
-}
-
-/* subtle premium "coming soon" badge — muted on purpose so these never
-   read as clickable / functional */
-.mc-badge{
-    flex:0 0 auto;
-
-    font-family:var(--font-display);
-    font-size:9px;
-    font-weight:700;
-    letter-spacing:.7px;
-    text-transform:uppercase;
-    white-space:nowrap;
-
-    padding:4px 9px;
-    border-radius:999px;
-
-    color:rgba(255,255,255,.55);
-    background: rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.16);
-}
-
-.model-card.mc-active .mc-badge{
-    color:#04121c;
-    background: linear-gradient(145deg, var(--accent-2), var(--accent) 70%);
-    border:1px solid rgba(255,255,255,.5);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.6);
-}
-
-.mc-launch{
-    margin-top:4px;
-    align-self:flex-start;
+@media(max-width:1024px){
+    .models-grid{ --mc-card-max: 280px; grid-template-columns:repeat(auto-fill, minmax(200px, var(--mc-card-max))); gap:16px; }
 }
 
 @media(max-width:768px){
     .models-wrap{ order:3; width:100%; padding:20px 16px 18px; }
-    .models-grid{ grid-template-columns:1fr 1fr; gap:12px; }
-    .model-card{ padding:18px 16px 16px; }
+    .models-grid{ grid-template-columns:repeat(2, minmax(0, var(--mc-card-max))); gap:14px; }
+    .mc-preview{ height:108px; }
 }
 
 @media(max-width:520px){
-    .models-grid{ grid-template-columns:1fr; }
+    .models-grid{ grid-template-columns:minmax(0, 1fr); }
+    .model-card{ max-width:340px; }
 }
 
 /* ================= Responsive ================= */
@@ -1120,78 +1483,81 @@ body{
         <div class="pt-body" id="modelsBody">
           <div class="pt-body-inner">
 
-        <div class="models-grid">
+        <!-- Filters are metadata queries over the SAME centralized
+             model dataset (./js/data/models3d.js) — they never hold
+             their own copy of model data, only the option lists in
+             ./js/data/filterTaxonomy.js and the current selection. -->
+        <div class="mc-filterbar" id="modelsFilterBar">
 
-            <a class="model-card mc-active mc-visualizer" href="./explorer.html">
-                <div class="mc-visual">
-                    <div class="atom-stage atom-stage--sm">
-                        <div class="ring r1"><div class="e"></div></div>
-                        <div class="ring r2"><div class="e"></div></div>
-                        <div class="ring r3"><div class="e"></div></div>
-                        <div class="atom-core"></div>
+            <div class="mc-filter-field">
+                <label for="filterSubject">Subject</label>
+                <select id="filterSubject" class="mc-filter-select"></select>
+                <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <div class="mc-filter-field">
+                <label for="filterClass">Class</label>
+                <select id="filterClass" class="mc-filter-select"></select>
+                <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <div class="mc-filter-field">
+                <label for="filterTopic">Topic</label>
+                <select id="filterTopic" class="mc-filter-select" disabled></select>
+                <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <button type="button" class="mc-filter-clear" id="modelsClearFiltersBtn">
+                Clear Filters
+            </button>
+
+        </div>
+
+        <div class="mc-filter-empty" id="modelsFilterEmpty" hidden>
+            No models match these filters yet — try a different combination or
+            <button type="button" class="mc-filter-empty-clear" id="modelsFilterEmptyClear">clear filters</button>.
+        </div>
+
+        <div class="models-grid" id="modelsGrid">
+
+            <!-- The Visualizer card keeps its own animated atom preview,
+                 so it stays hand-authored here — but its name/description
+                 still come from the "atomic-structure" model record below,
+                 not a second copy of that text. Every other card in this
+                 grid (one per model, never one per subject) is rendered
+                 from ./js/data/models3d.js at runtime; see the module
+                 script near the bottom of this page. -->
+            <a class="model-card mc-active mc-visualizer" href="./explorer.html" id="visualizerCard" style="--card-accent:var(--accent);">
+                <div class="mc-preview">
+                    <div class="mc-stage">
+                        <div class="atom-stage atom-stage--sm">
+                            <div class="ring r1"><div class="e"></div></div>
+                            <div class="ring r2"><div class="e"></div></div>
+                            <div class="ring r3"><div class="e"></div></div>
+                            <div class="atom-core"></div>
+                        </div>
                     </div>
+                    <div class="mc-tag">⚛</div>
                 </div>
-                <div class="mc-icon">🧭</div>
-                <div class="mc-name">Visualizer</div>
-                <div class="mc-desc">Journey inside the atom. Explore the Bohr and Quantum Orbital models across the full periodic table in an interactive 3D universe.</div>
-                <div class="mc-items">
-                    <div class="mc-item">
-                        <span class="mc-item-name">⚛ Bohr Model</span>
-                        <span class="mc-badge">Included</span>
+                <div class="mc-body">
+                    <div class="mc-name" id="visualizerCardName">Visualizer</div>
+                    <div class="mc-meta">
+                        <span class="mc-meta-subject">Chemistry</span>
+                        <span class="mc-meta-topic">• Bohr &amp; Quantum Models</span>
+                        <span class="mc-meta-class">Class 9–12</span>
                     </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">☁ Quantum Model</span>
-                        <span class="mc-badge">Included</span>
-                    </div>
+                    <div class="mc-desc" id="visualizerCardDesc"></div>
                 </div>
-                <span class="mc-badge mc-launch">Open Visualizer →</span>
+                <div class="mc-footer">
+                    <span class="mc-action is-available">Explore →</span>
+                </div>
             </a>
 
-            <div class="model-card mc-soon">
-                <div class="mc-icon">🧬</div>
-                <div class="mc-name">Molecular Models</div>
-                <div class="mc-items">
-                    <div class="mc-item">
-                        <span class="mc-item-name">Molecule Explorer</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Lewis Structures</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Molecular Geometry</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Molecular Builder</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="model-card mc-soon">
-                <div class="mc-icon">🔗</div>
-                <div class="mc-name">Bonding Models</div>
-                <div class="mc-items">
-                    <div class="mc-item">
-                        <span class="mc-item-name">Ionic Bonding</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Covalent Bonding</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Metallic Bonding</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                    <div class="mc-item">
-                        <span class="mc-item-name">Bond Polarity</span>
-                        <span class="mc-badge">Coming Soon</span>
-                    </div>
-                </div>
-            </div>
+            <!-- Remaining model cards (one per individual visualization —
+                 Electric Field, DNA Double Helix, Molecular Structure,
+                 Human Cell, Projectile Motion, Solar System, Chemical
+                 Bonding, Human Heart, Magnetic Field) are appended here
+                 by renderModelCards() at runtime. -->
 
         </div>
 
@@ -1214,6 +1580,8 @@ body{
 <script type="module">
 
 import { ELEMENTS } from "./js/elements.js";
+import { getModelById, filterModels, sortModels } from "./js/data/models3d.js";
+import { SUBJECTS, CLASS_OPTIONS, getTopicOptions } from "./js/data/filterTaxonomy.js";
 
 //====================================================
 // Build the periodic table grid from the SAME element
@@ -1598,6 +1966,380 @@ setModelsCollapsed(false);
 modelsToggleBtn.addEventListener("click", ()=>{
     setModelsCollapsed(!modelsBody.classList.contains("pt-collapsed"));
 });
+
+//====================================================
+// Render 3D Models grid from the centralized model data
+// (./js/data/models3d.js). One card per MODEL, never per
+// subject — see the "core rule" comment at the top of that
+// file. Adding a new model to the library is done there, by
+// adding data; nothing here needs to change.
+//====================================================
+
+const SUBJECT_ICON = {
+    "Chemistry": "⚛",
+    "Physics": "🪐",
+    "Biology": "🧬"
+};
+
+// CSS custom-property name per subject — drives the display case's
+// glow, sheen tint and specimen-tag color. New subjects fall back to
+// the default violet accent rather than needing a code change here.
+const SUBJECT_ACCENT_VAR = {
+    "Chemistry": "var(--accent)",
+    "Physics": "var(--accent-blue)",
+    "Biology": "var(--accent-teal)"
+};
+
+function iconForModel(model){
+    return SUBJECT_ICON[model.subject] || "🧭";
+}
+
+function accentForModel(model){
+    return SUBJECT_ACCENT_VAR[model.subject] || "var(--accent)";
+}
+
+// "[9,10,11,12]" -> "Class 9–12"; "[11,12]" -> "Class 11–12";
+// a single-class list collapses to "Class 11".
+function classLabel(classes){
+    if (!Array.isArray(classes) || classes.length === 0) return "";
+    const min = Math.min(...classes);
+    const max = Math.max(...classes);
+    return "Class " + (min === max ? String(min) : min + "–" + max);
+}
+
+const prefersReducedMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Pointer-tracked lift/tilt/sheen for available cards only — the
+// number of "available" models stays small relative to the whole
+// library even as it grows into the hundreds, so a listener per
+// active card is cheap; coming-soon cards get a plain CSS hover
+// instead and never carry this cost.
+function attachModelCardTilt(card){
+    if (prefersReducedMotion) return;
+
+    const maxTilt = 7;
+
+    function handleMove(e){
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+
+        card.style.setProperty("--tiltX", ((0.5 - py) * maxTilt * 2).toFixed(2) + "deg");
+        card.style.setProperty("--tiltY", ((px - 0.5) * maxTilt * 2).toFixed(2) + "deg");
+        card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+    }
+
+    function reset(){
+        card.style.setProperty("--tiltX", "0deg");
+        card.style.setProperty("--tiltY", "0deg");
+    }
+
+    card.addEventListener("pointermove", handleMove);
+    card.addEventListener("pointerleave", reset);
+    card.addEventListener("blur", reset);
+}
+
+// Builds the glass display-case preview shared by every generated
+// card: a lit case, a slowly-spinning faceted "crystal" standing in
+// for the model's 3D subject, and a specimen tag carrying the
+// subject icon. Coming-soon cases render the same markup — they're
+// simply dimmed and slowed by the .mc-soon CSS rules, never hidden
+// or swapped for something that implies functionality.
+function buildPreview(model){
+    const preview = document.createElement("div");
+    preview.className = "mc-preview";
+
+    const stage = document.createElement("div");
+    stage.className = "mc-stage";
+
+    const crystal = document.createElement("div");
+    crystal.className = "mc-crystal";
+    ["f1", "f2", "f3", "f4", "f5"].forEach((f) => {
+        const facet = document.createElement("div");
+        facet.className = "facet " + f;
+        crystal.appendChild(facet);
+    });
+
+    stage.appendChild(crystal);
+    preview.appendChild(stage);
+
+    const tag = document.createElement("div");
+    tag.className = "mc-tag";
+    tag.textContent = iconForModel(model);
+    preview.appendChild(tag);
+
+    return preview;
+}
+
+function buildModelCard(model){
+
+    const available = model.status === "available";
+
+    const el = document.createElement(available ? "a" : "div");
+    el.className = "model-card " + (available ? "mc-active" : "mc-soon");
+    el.setAttribute("data-model-id", model.id);
+    el.setAttribute("data-subject", model.subject);
+    el.style.setProperty("--card-accent", accentForModel(model));
+
+    if (available) {
+        el.href = model.route;
+        el.setAttribute("tabindex", "0");
+    } else {
+        // Never a live link and never styled as one — no href, no
+        // click target, so there is no broken route to follow.
+        el.setAttribute("aria-disabled", "true");
+    }
+
+    el.appendChild(buildPreview(model));
+
+    const body = document.createElement("div");
+    body.className = "mc-body";
+
+    const name = document.createElement("div");
+    name.className = "mc-name";
+    name.textContent = model.name;
+    body.appendChild(name);
+
+    const meta = document.createElement("div");
+    meta.className = "mc-meta";
+
+    const subjectEl = document.createElement("span");
+    subjectEl.className = "mc-meta-subject";
+    subjectEl.textContent = model.subject;
+    meta.appendChild(subjectEl);
+
+    if (model.topic) {
+        const topicEl = document.createElement("span");
+        topicEl.className = "mc-meta-topic";
+        topicEl.textContent = "• " + model.topic;
+        meta.appendChild(topicEl);
+    }
+
+    const classEl = document.createElement("span");
+    classEl.className = "mc-meta-class";
+    classEl.textContent = classLabel(model.classes);
+    meta.appendChild(classEl);
+
+    body.appendChild(meta);
+
+    const desc = document.createElement("div");
+    desc.className = "mc-desc";
+    desc.textContent = model.description || "";
+    body.appendChild(desc);
+
+    el.appendChild(body);
+
+    const footer = document.createElement("div");
+    footer.className = "mc-footer";
+
+    const action = document.createElement("span");
+    action.className = "mc-action " + (available ? "is-available" : "is-soon");
+    action.textContent = available ? "Explore →" : "◇ Coming Soon";
+    footer.appendChild(action);
+
+    el.appendChild(footer);
+
+    if (available) {
+        attachModelCardTilt(el);
+    }
+
+    return el;
+}
+
+//====================================================
+// Filter bar — Subject / Class / Topic
+//
+// Filters never hold their own copy of model data. Every render
+// pass calls filterModels() from ./js/data/models3d.js against the
+// one centralized dataset; this section only tracks which options
+// are selected and rebuilds the grid from whatever that call
+// returns.
+//====================================================
+
+const filterSubjectEl = document.getElementById("filterSubject");
+const filterClassEl = document.getElementById("filterClass");
+const filterTopicEl = document.getElementById("filterTopic");
+const filterClearBtn = document.getElementById("modelsClearFiltersBtn");
+const filterEmptyEl = document.getElementById("modelsFilterEmpty");
+const filterEmptyClearBtn = document.getElementById("modelsFilterEmptyClear");
+
+function populateFilterOptions(){
+
+    if (!filterSubjectEl || !filterClassEl || !filterTopicEl) return;
+
+    const subjectAll = document.createElement("option");
+    subjectAll.value = "all";
+    subjectAll.textContent = "All Subjects";
+    filterSubjectEl.appendChild(subjectAll);
+
+    SUBJECTS.forEach((subject) => {
+        const opt = document.createElement("option");
+        opt.value = subject;
+        opt.textContent = subject;
+        filterSubjectEl.appendChild(opt);
+    });
+
+    // Chemistry keeps its full Chemistry page (including the Periodic Table),
+    // while the 3D Models subsection itself is scoped to Chemistry models only.
+    filterSubjectEl.value = "Chemistry";
+    filterSubjectEl.disabled = true;
+
+    CLASS_OPTIONS.forEach((entry) => {
+        const opt = document.createElement("option");
+        opt.value = String(entry.value);
+        opt.textContent = entry.label;
+        filterClassEl.appendChild(opt);
+    });
+
+    refreshTopicOptions();
+}
+
+// A class <select> only ever carries strings, so numeric class
+// values ("11") are parsed back to numbers here — everything else
+// (subject names, "dropper"/"competitive"/"ug" tokens) passes
+// through as-is.
+function parseClassValue(raw){
+    if (raw === "all" || raw === "") return "all";
+    return /^\d+$/.test(raw) ? Number(raw) : raw;
+}
+
+// Rebuilds the Topic <select> to match the current Subject + Class
+// selection. Per the filter spec: don't show every topic when a
+// subject-specific list is available, and don't show any curated
+// list at all until a subject is chosen.
+function refreshTopicOptions(){
+    if (!filterTopicEl || !filterSubjectEl || !filterClassEl) return;
+
+    const subject = filterSubjectEl.value;
+    const classValue = parseClassValue(filterClassEl.value);
+    const topics = getTopicOptions(subject, classValue);
+    const previousValue = filterTopicEl.value;
+
+    filterTopicEl.innerHTML = "";
+
+    const allOpt = document.createElement("option");
+    allOpt.value = "all";
+    allOpt.textContent = "All Topics";
+    filterTopicEl.appendChild(allOpt);
+
+    topics.forEach((topic) => {
+        const opt = document.createElement("option");
+        opt.value = topic;
+        opt.textContent = topic;
+        filterTopicEl.appendChild(opt);
+    });
+
+    // Keep the previous topic selected if it's still offered under the
+    // new subject/class (e.g. switching Class 11 -> 12 within
+    // Chemistry keeps "Atomic Structure" selected); otherwise reset.
+    filterTopicEl.value = topics.indexOf(previousValue) !== -1 ? previousValue : "all";
+    filterTopicEl.disabled = topics.length === 0;
+}
+
+function getSelectedCriteria(){
+    const criteria = {};
+
+    if (filterSubjectEl && filterSubjectEl.value !== "all") {
+        criteria.subject = filterSubjectEl.value;
+    }
+
+    if (filterClassEl && filterClassEl.value !== "all") {
+        criteria.classLevel = parseClassValue(filterClassEl.value);
+    }
+
+    if (filterTopicEl && !filterTopicEl.disabled && filterTopicEl.value !== "all") {
+        criteria.topic = filterTopicEl.value;
+    }
+
+    return criteria;
+}
+
+function renderModelCards(){
+
+    // The Visualizer card is hand-authored above (it hosts the unique
+    // orbiting-electron preview instead of the generic crystal) but
+    // its copy is still sourced from the "atomic-structure" record,
+    // so there's still only one place that text lives.
+    const visualizerModel = getModelById("atomic-structure");
+    if (visualizerModel) {
+        const nameEl = document.getElementById("visualizerCardName");
+        const descEl = document.getElementById("visualizerCardDesc");
+        if (nameEl) nameEl.textContent = visualizerModel.name;
+        if (descEl) descEl.textContent = visualizerModel.description;
+    }
+
+    const grid = document.getElementById("modelsGrid");
+    if (!grid) return;
+
+    const criteria = getSelectedCriteria();
+    const matches = filterModels(criteria);
+    const matchIds = new Set(matches.map((m) => m.id));
+
+    // The Visualizer card represents the "atomic-structure" model —
+    // it respects the same filters as every generated card instead
+    // of always staying visible.
+    const visualizerCard = document.getElementById("visualizerCard");
+    if (visualizerCard) {
+        const visible = matchIds.has("atomic-structure");
+        visualizerCard.hidden = !visible;
+        if (visible) attachModelCardTilt(visualizerCard);
+    }
+
+    // Clear only previously generated cards — the hand-authored
+    // Visualizer card stays in place and is just shown/hidden above.
+    grid.querySelectorAll(".model-card:not(#visualizerCard)").forEach((el) => el.remove());
+
+    const rest = sortModels(
+        matches.filter((m) => m.id !== "atomic-structure"),
+        "priority",
+        "desc"
+    );
+
+    rest.forEach((model) => {
+        grid.appendChild(buildModelCard(model));
+    });
+
+    if (filterEmptyEl) filterEmptyEl.hidden = matches.length !== 0;
+}
+
+function clearModelFilters(){
+    // The Chemistry page always keeps the 3D Models subsection scoped to
+    // Chemistry; clearing filters only resets class/topic within Chemistry.
+    if (filterSubjectEl) filterSubjectEl.value = "Chemistry";
+    if (filterClassEl) filterClassEl.value = "all";
+    refreshTopicOptions();
+    renderModelCards();
+}
+
+if (filterSubjectEl) {
+    filterSubjectEl.addEventListener("change", () => {
+        refreshTopicOptions();
+        renderModelCards();
+    });
+}
+
+if (filterClassEl) {
+    filterClassEl.addEventListener("change", () => {
+        refreshTopicOptions();
+        renderModelCards();
+    });
+}
+
+if (filterTopicEl) {
+    filterTopicEl.addEventListener("change", renderModelCards);
+}
+
+if (filterClearBtn) {
+    filterClearBtn.addEventListener("click", clearModelFilters);
+}
+
+if (filterEmptyClearBtn) {
+    filterEmptyClearBtn.addEventListener("click", clearModelFilters);
+}
+
+populateFilterOptions();
+renderModelCards();
 
 //====================================================
 // Subtle 3D parallax — desktop cursor + mobile touch

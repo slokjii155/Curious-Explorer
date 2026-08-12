@@ -19,13 +19,17 @@
 
 :root{
     --royal-black:#010102;
-    --glass:rgba(255,255,255,.05);
-    --glass-strong:rgba(255,255,255,.09);
-    --glass-border:rgba(255,255,255,.14);
+    --glass:rgba(180,150,255,.055);
+    --glass-strong:rgba(185,155,255,.12);
+    --glass-border:rgba(190,165,255,.2);
     --lavender:#b9a6ff;
     --lavender-soft:#d9cfff;
-    --lavender-glow:rgba(185,166,255,.35);
-    --lavender-tint:rgba(150,128,255,.10);
+    --lavender-glow:rgba(185,166,255,.42);
+    --lavender-tint:rgba(150,110,255,.16);
+
+    --deep-purple:#1a0f38;
+    --deep-purple-soft:#2c1a5c;
+    --violet-glow:rgba(140,90,255,.28);
 
     --font-display:'Sora', 'Segoe UI', sans-serif;
     --font-body:'Inter', 'Segoe UI', sans-serif;
@@ -93,7 +97,8 @@ body{
     z-index:1;
     pointer-events:none;
     background:
-    radial-gradient(circle at 50% 38%, transparent 0%, rgba(9,5,18,.46) 60%, rgba(4,2,9,.93) 100%);
+    radial-gradient(circle at 50% 38%, transparent 0%, rgba(8,7,16,.20) 55%, rgba(0,0,2,.96) 100%),
+    linear-gradient(180deg, rgba(8,6,14,.10), transparent 30%, transparent 70%, rgba(4,3,10,.18));
 }
 
 /* directional light tint — soft royal white/lavender wash across the glass,
@@ -104,9 +109,14 @@ body{
     z-index:1;
     pointer-events:none;
     background:
-    radial-gradient(ellipse 950px 660px at 78% -6%, rgba(255,255,255,.13), transparent 62%),
-    radial-gradient(ellipse 750px 560px at 6% 6%, rgba(185,166,255,.18), transparent 60%),
-    radial-gradient(ellipse 1200px 900px at 50% 60%, var(--lavender-tint), transparent 72%);
+    /* Reference-grade premium tint: near-black core with restrained colour
+       pockets at the edges — magenta upper-left, violet upper-right,
+       cyan right edge and electric-blue lower-right. */
+    radial-gradient(ellipse 620px 520px at 14% -4%, rgba(178,38,255,.13), transparent 68%),
+    radial-gradient(ellipse 760px 540px at 96% 25%, rgba(18,115,185,.075), transparent 70%),
+    radial-gradient(ellipse 620px 500px at 84% 104%, rgba(22,82,255,.11), transparent 68%),
+    radial-gradient(ellipse 920px 700px at 50% 50%, rgba(54,24,112,.035), transparent 72%),
+    radial-gradient(ellipse 950px 660px at 78% -6%, rgba(255,255,255,.035), transparent 62%);
     mix-blend-mode:screen;
 }
 
@@ -145,7 +155,7 @@ body{
     z-index:1;
     pointer-events:none;
     mix-blend-mode:screen;
-    opacity:.85;
+    opacity:.42;
     transform:translateX(var(--px));
     transition:transform .4s ease-out;
 }
@@ -160,13 +170,13 @@ body{
     transform:translateX(-50%);
     background:conic-gradient(from 200deg at 50% 0%,
         transparent 0deg,
-        rgba(255,255,255,.10) 8deg,
+        rgba(255,255,255,.045) 8deg,
         transparent 16deg,
         transparent 24deg,
-        rgba(217,207,255,.08) 33deg,
+        rgba(180,200,255,.035) 33deg,
         transparent 42deg,
         transparent 150deg,
-        rgba(255,255,255,.07) 158deg,
+        rgba(255,255,255,.035) 158deg,
         transparent 166deg,
         transparent 360deg);
     filter:blur(2px);
@@ -180,7 +190,7 @@ body{
     width:640px;
     height:640px;
     transform:translateX(-50%);
-    background:radial-gradient(circle, rgba(255,255,255,.20) 0%, rgba(217,207,255,.10) 34%, transparent 68%);
+    background:radial-gradient(circle, rgba(255,255,255,.09) 0%, rgba(190,205,255,.045) 34%, transparent 68%);
     filter:blur(6px);
 }
 
@@ -193,7 +203,7 @@ body{
     inset:0;
     z-index:1;
     pointer-events:none;
-    opacity:.6;
+    opacity:.28;
     mix-blend-mode:screen;
     filter:blur(2px);
 }
@@ -209,14 +219,14 @@ body{
 .aurora-glow span:nth-child(1){
     width:52vw; height:52vw;
     left:-14vw; bottom:-18vh;
-    background:radial-gradient(circle, rgba(120,140,255,.30), transparent 70%);
+    background:radial-gradient(circle, rgba(126,45,255,.22), transparent 70%);
     animation-duration:26s;
 }
 
 .aurora-glow span:nth-child(2){
     width:40vw; height:40vw;
     right:-10vw; top:-14vh;
-    background:radial-gradient(circle, rgba(185,166,255,.24), transparent 70%);
+    background:radial-gradient(circle, rgba(72,34,170,.13), transparent 70%);
     animation-duration:20s;
     animation-delay:-6s;
 }
@@ -224,7 +234,7 @@ body{
 .aurora-glow span:nth-child(3){
     width:34vw; height:34vw;
     right:6vw; bottom:-16vh;
-    background:radial-gradient(circle, rgba(120,220,255,.14), transparent 72%);
+    background:radial-gradient(circle, rgba(18,105,210,.14), transparent 72%);
     animation-duration:24s;
     animation-delay:-11s;
 }
@@ -353,9 +363,8 @@ body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:56px;
 
-    text-align:center;
+    padding:48px 0;
 
     /* the whole homepage tilts a touch toward the cursor, like a slab of
        glass being gently turned in the light */
@@ -365,6 +374,26 @@ body{
     rotateY(var(--tiltX));
     transition:transform .5s cubic-bezier(.4,0,.2,1);
     will-change:transform;
+}
+
+/* Single max-width content column everything aligns to — replaces the old
+   corner-absolute overlay technique (which could overlap the hero once the
+   page grew taller than the viewport). Every section now lives in normal
+   document flow, stacked top to bottom, so nothing can ever overlap
+   regardless of content height or viewport size. */
+.page-inner{
+    position:relative;
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 40px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:64px;
+
+    text-align:center;
 }
 
 /* ===================== HERO ===================== */
@@ -415,16 +444,18 @@ body{
 
 .subjects{
     display:grid;
-    grid-template-columns:repeat(3, 220px);
-    gap:22px;
+    grid-template-columns:repeat(auto-fit, 220px);
+    gap:24px;
     justify-content:center;
+    width:100%;
+    max-width:780px;
 }
 
 .subjects-section{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:22px;
+    gap:26px;
     width:100%;
 }
 
@@ -450,14 +481,15 @@ body{
     border-radius:22px;
 
     box-shadow:
-    0 14px 40px rgba(0,0,0,.55),
-    0 0 26px rgba(185,166,255,.07),
+    0 14px 40px rgba(10,4,26,.6),
+    0 0 30px rgba(140,90,255,.1),
     inset 0 1px 1px rgba(255,255,255,.12);
 
     cursor:pointer;
     touch-action:manipulation;
 
     overflow:hidden;
+    perspective:700px;
 
     transition:transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, border-color .35s ease, opacity .35s ease;
 }
@@ -477,11 +509,11 @@ body{
 
 .subject-card:hover,
 .subject-card:focus-visible{
-    transform:translateY(-6px);
+    transform:translateY(-8px) rotateX(5deg) rotateY(-5deg) scale(1.015);
     border-color:rgba(185,166,255,.55);
     box-shadow:
-    0 22px 55px rgba(0,0,0,.55),
-    0 0 40px var(--lavender-glow),
+    0 26px 60px rgba(10,4,26,.65),
+    0 0 46px var(--lavender-glow),
     inset 0 1px 1px rgba(255,255,255,.18);
     outline:none;
 }
@@ -491,7 +523,7 @@ body{
     transform:translateY(-2px) scale(.98);
     border-color:rgba(185,166,255,.5);
     box-shadow:
-    0 10px 26px rgba(0,0,0,.5),
+    0 10px 26px rgba(10,4,26,.6),
     0 0 30px var(--lavender-glow),
     inset 0 1px 1px rgba(255,255,255,.16);
 }
@@ -590,7 +622,7 @@ body{
 .subject-card.is-favorite{
     border-color:rgba(185,166,255,.55);
     box-shadow:
-    0 14px 40px rgba(0,0,0,.55),
+    0 14px 40px rgba(10,4,26,.6),
     0 0 30px var(--lavender-glow),
     inset 0 1px 1px rgba(255,255,255,.16);
 }
@@ -649,7 +681,7 @@ body{
     border-radius:999px;
 
     box-shadow:
-    0 10px 30px rgba(0,0,0,.45),
+    0 10px 30px rgba(10,4,26,.5),
     inset 0 1px 1px rgba(255,255,255,.14);
 
     cursor:pointer;
@@ -662,7 +694,7 @@ body{
     transform:translateY(-3px);
     border-color:rgba(185,166,255,.55);
     box-shadow:
-    0 16px 40px rgba(0,0,0,.5),
+    0 16px 40px rgba(10,4,26,.55),
     0 0 26px var(--lavender-glow),
     inset 0 1px 1px rgba(255,255,255,.18);
     outline:none;
@@ -679,6 +711,441 @@ body{
 .show-more-btn.is-expanded .chevron{
     transform:rotate(180deg);
 }
+
+/* ===================== PREFERENCES: TOGGLE, BACKDROP, SIDEBAR ===================== */
+
+/* Fixed stack in the top-right corner — Preferences on top, 3D Models
+   directly below it, sharing the same right edge so they read as one
+   aligned column of small utility controls. */
+.corner-controls{
+    position:fixed;
+    top:max(22px, env(safe-area-inset-top));
+    right:max(22px, env(safe-area-inset-right));
+    z-index:30;
+
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+
+    transition:opacity .3s ease, transform .3s ease;
+}
+
+.corner-controls.is-hidden{
+    opacity:0;
+    transform:translateY(-6px) scale(.96);
+    pointer-events:none;
+}
+
+/* Small glass trigger, tucked into the corner so it never competes with
+   the hero/subjects for attention — click it to reveal the drawer. */
+.prefs-toggle{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    padding:11px 16px 11px 13px;
+
+    font-family:var(--font-display);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.85);
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+
+    border:1px solid var(--glass-border);
+    border-radius:999px;
+
+    box-shadow:
+    0 10px 28px rgba(10,4,26,.5),
+    inset 0 1px 1px rgba(255,255,255,.14);
+
+    cursor:pointer;
+    transition:transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease, border-color .3s ease, color .3s ease, opacity .3s ease;
+}
+
+.prefs-toggle svg{ flex:none; filter:drop-shadow(0 0 6px var(--lavender-glow)); }
+
+.prefs-toggle:hover,
+.prefs-toggle:focus-visible{
+    color:#fff;
+    transform:translateY(-2px);
+    border-color:rgba(185,166,255,.55);
+    box-shadow:
+    0 16px 36px rgba(10,4,26,.55),
+    0 0 24px var(--lavender-glow),
+    inset 0 1px 1px rgba(255,255,255,.18);
+    outline:none;
+}
+
+.prefs-toggle:active{ transform:translateY(0) scale(.97); }
+
+.prefs-toggle.has-selection::after{
+    content:"";
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--lavender-soft), var(--lavender));
+    box-shadow:0 0 10px var(--lavender-glow), 0 0 0 2px var(--royal-black);
+}
+
+@media(max-width:560px){
+    .prefs-toggle-label{ display:none; }
+    .prefs-toggle{ padding:12px; }
+}
+
+/* ===================== 3D MODELS ENTRY BUTTON ===================== */
+
+/* Deliberately the plainest control in the corner stack — text only, no
+   icon, no subtitle. This is patch 2 of the 3D Models system: just the
+   entry point, nothing else. Same glass language as Preferences, sized
+   down slightly so it reads as a secondary utility rather than a second
+   primary action. */
+.models3d-toggle{
+    position:relative;
+    overflow:hidden;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:9px 16px;
+
+    font-family:var(--font-display);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.78);
+    text-align:center;
+    text-decoration:none;
+    white-space:nowrap;
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+
+    border:1px solid var(--glass-border);
+    border-radius:999px;
+
+    box-shadow:
+    0 8px 22px rgba(10,4,26,.45),
+    inset 0 1px 1px rgba(255,255,255,.12);
+
+    cursor:pointer;
+    transition:transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease, border-color .3s ease, color .3s ease;
+}
+
+/* moving glass reflection sweep on hover — the same restrained cue used
+   on the other glass controls, kept subtle here */
+.models3d-toggle::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(115deg, transparent 34%, rgba(255,255,255,.16) 50%, transparent 66%);
+    transform:translateX(-130%);
+    transition:transform .7s ease;
+    pointer-events:none;
+}
+
+.models3d-toggle:hover::before,
+.models3d-toggle:focus-visible::before{
+    transform:translateX(130%);
+}
+
+.models3d-toggle:hover,
+.models3d-toggle:focus-visible{
+    color:#fff;
+    transform:translateY(-2px);
+    border-color:rgba(185,166,255,.45);
+    box-shadow:
+    0 14px 30px rgba(10,4,26,.5),
+    0 0 18px var(--lavender-glow),
+    inset 0 1px 1px rgba(255,255,255,.16);
+    outline:none;
+}
+
+.models3d-toggle:active{
+    transform:translateY(0) scale(.97);
+}
+
+.prefs-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:28;
+
+    background:rgba(2,2,5,.55);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s ease;
+}
+
+.prefs-backdrop.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* the drawer itself — glossy, transparent, faintly 3D via the layered
+   gradient + inset highlight, sliding in from the right */
+.prefs-sidebar{
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    z-index:29;
+
+    width:min(380px, 88vw);
+    height:100dvh;
+
+    background:
+    linear-gradient(165deg, rgba(255,255,255,.1), rgba(255,255,255,.03) 40%, rgba(10,8,18,.5)),
+    linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(30px) saturate(180%);
+    -webkit-backdrop-filter:blur(30px) saturate(180%);
+
+    border-left:1px solid var(--glass-border);
+    box-shadow:
+    -30px 0 70px rgba(10,4,26,.6),
+    inset 1px 0 1px rgba(255,255,255,.1);
+
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.prefs-sidebar.is-open{
+    transform:translateX(0);
+}
+
+.prefs-sidebar-inner{
+    padding:
+    max(28px, env(safe-area-inset-top))
+    26px
+    32px
+    26px;
+
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
+
+.prefs-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.prefs-title{
+    font-family:var(--font-display);
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:.2px;
+    background:linear-gradient(135deg, #fff 0%, var(--lavender-soft) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.prefs-close{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--glass-border);
+    color:#fff;
+    cursor:pointer;
+    font-size:13px;
+
+    transition:transform .2s cubic-bezier(.4,0,.2,1), background .2s ease, border-color .2s ease;
+}
+
+.prefs-close:hover{
+    background:rgba(255,255,255,.12);
+    border-color:rgba(185,166,255,.5);
+}
+
+.prefs-close:active{ transform:scale(.9); }
+
+.prefs-hint{
+    margin-top:-12px;
+    font-size:13px;
+    line-height:1.55;
+    color:rgba(255,255,255,.5);
+}
+
+.prefs-divider{
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--glass-border) 20%, var(--glass-border) 80%, transparent);
+}
+
+/* ===================== SELECTOR GROUPS (inside the sidebar) ===================== */
+
+.selector-bar{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.selector-bar-title{
+    font-family:var(--font-display);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    color:var(--lavender-soft);
+    opacity:.85;
+}
+
+/* Apple-settings-row layout: label on the left, compact control on the
+   right, so the dropdown's arrow sits right against its own value instead
+   of stretching into a wide empty box. */
+.selector-group{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    text-align:left;
+}
+
+.selector-group[hidden]{
+    display:none;
+}
+
+.selector-label{
+    font-family:var(--font-display);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.2px;
+    text-transform:none;
+    color:rgba(255,255,255,.82);
+}
+
+.selector-optional{
+    text-transform:none;
+    font-weight:400;
+    letter-spacing:0;
+    color:rgba(255,255,255,.4);
+}
+
+/* auto-width chip that hugs its own text + arrow, instead of a fixed wide
+   box with a stranded arrow far from the label */
+.selector-control{
+    width:auto;
+    max-width:100%;
+    padding:9px 30px 9px 14px;
+
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:500;
+    color:#fff;
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    backdrop-filter:blur(20px) saturate(170%);
+    -webkit-backdrop-filter:blur(20px) saturate(170%);
+
+    border:1px solid var(--glass-border);
+    border-radius:12px;
+
+    cursor:pointer;
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9a6ff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:12px;
+
+    transition:border-color .25s ease, box-shadow .25s ease;
+}
+
+.selector-control:hover,
+.selector-control:focus-visible{
+    border-color:rgba(185,166,255,.55);
+    box-shadow:0 0 0 3px var(--lavender-glow);
+    outline:none;
+}
+
+.selector-control option{
+    background:#0c0a16;
+    color:#fff;
+}
+
+.segmented{
+    display:inline-flex;
+    padding:4px;
+    gap:4px;
+
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-radius:14px;
+}
+
+.segmented-btn{
+    padding:9px 16px;
+
+    font-family:var(--font-display);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.65);
+
+    background:transparent;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+
+    transition:background .25s ease, color .25s ease, box-shadow .25s ease;
+}
+
+.segmented-btn:hover{ color:#fff; }
+
+.segmented-btn.is-active{
+    color:#0a0a12;
+    background:linear-gradient(135deg, var(--lavender-soft), var(--lavender));
+    box-shadow:0 0 18px var(--lavender-glow);
+}
+
+.segmented-btn:focus-visible{
+    outline:2px solid var(--lavender);
+    outline-offset:2px;
+}
+
+.subjects-empty{
+    display:none;
+    max-width:440px;
+    padding:26px 24px;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+    color:rgba(255,255,255,.55);
+
+    background:linear-gradient(160deg, var(--glass-strong), var(--glass));
+    border:1px solid var(--glass-border);
+    border-radius:20px;
+}
+
+.subjects-empty.show{ display:block; }
 
 /* ===================== "COMING SOON" OVERLAY ===================== */
 
@@ -719,7 +1186,7 @@ body{
     border:1px solid var(--glass-border);
     border-radius:24px;
 
-    box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 40px var(--lavender-glow);
+    box-shadow:0 24px 60px rgba(10,4,26,.65), 0 0 40px var(--lavender-glow);
 }
 
 .soon-card h3{
@@ -810,7 +1277,7 @@ body{
     height:min(240px, 20vw);
     transform-style:preserve-3d;
     animation:modelTilt 10s ease-in-out infinite;
-    filter:drop-shadow(0 30px 60px rgba(0,0,0,.6));
+    filter:drop-shadow(0 30px 60px rgba(10,4,26,.65));
 }
 
 .model-left .model-3d{ animation-delay:.3s; }
@@ -872,11 +1339,23 @@ body{
         -webkit-overflow-scrolling:touch;
     }
 
-    .page{ gap:32px; height:auto; min-height:100%; padding:28px 0; }
+    .page{ height:auto; min-height:100%; padding:24px 0; justify-content:flex-start; }
+
+    .page-inner{ gap:32px; padding:112px 20px 0; }
 
     .brand{ letter-spacing:4px; font-size:13px; }
 
     .subline{ font-size:14px; padding:0 8px; }
+
+    .prefs-sidebar{ width:100%; }
+
+    .selector-group{ width:100%; align-items:stretch; }
+
+    .selector-control{ width:100%; min-width:0; }
+
+    .segmented{ width:100%; }
+
+    .segmented-btn{ flex:1; text-align:center; }
 
     .subjects{
         display:flex;
@@ -908,7 +1387,8 @@ body{
 }
 
 @media(max-width:768px) and (max-height:700px){
-    .page{ gap:20px; padding:18px 0; }
+    .page{ padding:14px 0; }
+    .page-inner{ gap:18px; padding-top:96px; }
     .headline{ font-size:clamp(26px, 6vw, 40px); }
     .subline{ margin-top:10px; }
     .subjects{ gap:10px; }
@@ -929,8 +1409,9 @@ body{
 
 </style>
 
-  <script type="module" crossorigin src="/assets/main-D19dlGaE.js"></script>
+  <script type="module" crossorigin src="/assets/main-ZcYalDGp.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-Dezn_h7o.js">
+  <link rel="modulepreload" crossorigin href="/assets/models3d-Bh912Ne-.js">
 </head>
 
 
@@ -1192,6 +1673,7 @@ body{
 </div>
 
 <div class="page">
+<div class="page-inner">
 
     <header class="hero">
 
@@ -1213,6 +1695,8 @@ body{
                  without hand-maintaining markup for every subject. -->
         </main>
 
+        <p class="subjects-empty" id="subjectsEmpty"></p>
+
         <div class="subjects-more-wrap">
             <button class="show-more-btn" id="subjectsMoreBtn" type="button" aria-expanded="false">
                 <span id="subjectsMoreLabel">Show More</span>
@@ -1222,9 +1706,119 @@ body{
             </button>
         </div>
 
+
     </div>
 
 </div>
+</div>
+
+<!-- ===================== PREFERENCES SIDEBAR ===================== -->
+<!-- Tucked out of the way on purpose: a small corner trigger instead of
+     panels sitting on the main page, so the hero and subjects stay the
+     focus. Opens a glossy glass drawer with the same two selector groups
+     (ids untouched — classSelector.js doesn't care where they live). -->
+
+<div class="corner-controls" id="cornerControls">
+
+    <button class="prefs-toggle" id="prefsToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="prefsSidebar" aria-label="Class and exam preferences">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="7" x2="20" y2="7"></line>
+            <circle cx="9" cy="7" r="2.1"></circle>
+            <line x1="4" y1="17" x2="20" y2="17"></line>
+            <circle cx="15" cy="17" r="2.1"></circle>
+        </svg>
+        <span class="prefs-toggle-label">Class &amp; Exam</span>
+    </button>
+
+    <!-- Entry point for the 3D Models system: opens the standalone
+         library page (./models.html), which shows only model cards
+         and links straight into each available model. -->
+    <a class="models3d-toggle" id="models3dToggle" href="./models.html" aria-label="3D Models">
+        3D Models
+    </a>
+
+</div>
+
+<div class="prefs-backdrop" id="prefsBackdrop"></div>
+
+<aside class="prefs-sidebar" id="prefsSidebar" aria-label="Class and exam preferences" aria-hidden="true">
+
+
+    <div class="prefs-sidebar-inner">
+
+        <div class="prefs-header">
+            <span class="prefs-title">Preferences</span>
+            <button class="prefs-close" id="prefsClose" type="button" aria-label="Close">✕</button>
+        </div>
+
+        <p class="prefs-hint">Fine-tune what shows up on your homepage.</p>
+
+        <section class="selector-bar" id="selectorBarLeft" aria-label="Competitive exam selection">
+
+            <span class="selector-bar-title">Competitive Exam</span>
+
+            <div class="selector-group">
+                <label class="selector-label" for="examSelect">Exam <span class="selector-optional">(optional)</span></label>
+                <select class="selector-control" id="examSelect">
+                    <option value="">None</option>
+                    <option value="jee">JEE</option>
+                    <option value="neet">NEET</option>
+                    <option value="cuet">CUET</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="selector-group" id="examModeGroup" hidden>
+                <span class="selector-label" id="examModeLabel">Show subjects by</span>
+                <div class="segmented" id="examModeSegmented" role="radiogroup" aria-labelledby="examModeLabel">
+                    <button type="button" class="segmented-btn is-active" data-mode="class" role="radio" aria-checked="true">Class-based</button>
+                    <button type="button" class="segmented-btn" data-mode="exam" role="radio" aria-checked="false">Exam-based</button>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="prefs-divider"></div>
+
+        <section class="selector-bar" id="selectorBarRight" aria-label="Class and stream selection">
+
+            <span class="selector-bar-title">Class &amp; Stream</span>
+
+            <div class="selector-group">
+                <label class="selector-label" for="classSelect">Class</label>
+                <select class="selector-control" id="classSelect">
+                    <option value="">Select class</option>
+                    <option value="1">Class 1</option>
+                    <option value="2">Class 2</option>
+                    <option value="3">Class 3</option>
+                    <option value="4">Class 4</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                    <option value="dropper">Dropper</option>
+                </select>
+            </div>
+
+            <div class="selector-group" id="streamGroup" hidden>
+                <label class="selector-label" for="streamSelect">Stream</label>
+                <select class="selector-control" id="streamSelect">
+                    <option value="">Select stream</option>
+                    <option value="science">Science</option>
+                    <option value="commerce">Commerce</option>
+                    <option value="humanities">Humanities / Arts</option>
+                </select>
+            </div>
+
+        </section>
+
+    </div>
+
+</aside>
 
 <div class="soon-overlay" id="soonOverlay">
     <div class="soon-card">
@@ -1308,6 +1902,60 @@ body{
 </script>
 
 <script src="./js/letterGlow.js"></script>
+
+<script>
+(function(){
+    var toggle = document.getElementById("prefsToggle");
+    var sidebar = document.getElementById("prefsSidebar");
+    var backdrop = document.getElementById("prefsBackdrop");
+    var closeBtn = document.getElementById("prefsClose");
+    var cornerControls = document.getElementById("cornerControls");
+    if(!toggle || !sidebar || !backdrop) return;
+
+    function openPrefs(){
+        sidebar.classList.add("is-open");
+        backdrop.classList.add("show");
+        sidebar.setAttribute("aria-hidden", "false");
+        toggle.setAttribute("aria-expanded", "true");
+        if(cornerControls) cornerControls.classList.add("is-hidden");
+    }
+
+    function closePrefs(){
+        sidebar.classList.remove("is-open");
+        backdrop.classList.remove("show");
+        sidebar.setAttribute("aria-hidden", "true");
+        toggle.setAttribute("aria-expanded", "false");
+        if(cornerControls) cornerControls.classList.remove("is-hidden");
+    }
+
+    toggle.addEventListener("click", function(){
+        if(sidebar.classList.contains("is-open")) closePrefs();
+        else openPrefs();
+    });
+
+    backdrop.addEventListener("click", closePrefs);
+    if(closeBtn) closeBtn.addEventListener("click", closePrefs);
+
+    document.addEventListener("keydown", function(e){
+        if(e.key === "Escape") closePrefs();
+    });
+
+    // small glowing dot on the corner button once a class or exam has
+    // actually been chosen, so it's clear a filter is active without
+    // needing the drawer open
+    var classSelect = document.getElementById("classSelect");
+    var examSelect = document.getElementById("examSelect");
+
+    function syncIndicator(){
+        var active = (classSelect && classSelect.value) || (examSelect && examSelect.value);
+        toggle.classList.toggle("has-selection", !!active);
+    }
+
+    if(classSelect) classSelect.addEventListener("change", syncIndicator);
+    if(examSelect) examSelect.addEventListener("change", syncIndicator);
+    syncIndicator();
+})();
+</script>
 
 </body>
 </html>

@@ -1,3 +1,5 @@
+import { getAllModels } from "./data/models3d.js";
+
 // Homepage "Subjects" section.
 //
 // Renders the subject cards from a single data list, then layers on:
@@ -23,29 +25,52 @@
     var SUBJECTS = [
         { id: "chemistry", name: "Chemistry", icon: "⚛", href: "./chemistry.html", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "physics", name: "Physics", icon: "🪐", href: "#", status: "soon",
+        { id: "physics", name: "Physics", icon: "🪐", href: "./models.html?subject=Physics", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "biology", name: "Biology", icon: "🧬", href: "#", status: "soon",
+        { id: "biology", name: "Biology", icon: "🧬", href: "./models.html?subject=Biology", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "math", name: "Mathematics", icon: "📐", href: "#", status: "soon",
+        { id: "science", name: "Science", icon: "🔬", href: "./models.html?subject=General%20Science", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "computer-science", name: "Computer Science", icon: "💻", href: "#", status: "soon",
+        { id: "math", name: "Mathematics", icon: "📐", href: "./models.html?subject=Mathematics", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "english", name: "English", icon: "📖", href: "#", status: "soon",
+        { id: "computer-science", name: "Computer Science", icon: "💻", href: "./models.html?subject=Computer%20Science", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "economics", name: "Economics", icon: "📈", href: "#", status: "soon",
+        { id: "english", name: "English", icon: "📖", href: "./models.html?subject=English", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "accountancy", name: "Accountancy", icon: "🧾", href: "#", status: "soon",
+        { id: "hindi", name: "Hindi", icon: "अ", href: "./models.html?subject=Hindi", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "business-studies", name: "Business Studies", icon: "💼", href: "#", status: "soon",
+        { id: "evs", name: "Environmental Studies", icon: "🌱", href: "./models.html?subject=Environmental%20Studies", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "geography", name: "Geography", icon: "🌍", href: "#", status: "soon",
+        { id: "economics", name: "Economics", icon: "📈", href: "./models.html?subject=Economics", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "political-science", name: "Political Science", icon: "🏛", href: "#", status: "soon",
+        { id: "accountancy", name: "Accountancy", icon: "🧾", href: "./models.html?subject=Accountancy", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-        { id: "history", name: "History", icon: "📜", href: "#", status: "soon",
+        { id: "business-studies", name: "Business Studies", icon: "💼", href: "./models.html?subject=Business%20Studies", status: "active",
+            chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
+        { id: "geography", name: "Geography", icon: "🌍", href: "./models.html?subject=Geography", status: "active",
+            chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
+        { id: "political-science", name: "Political Science", icon: "🏛", href: "./models.html?subject=Political%20Science", status: "active",
+            chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
+        { id: "history", name: "History", icon: "📜", href: "./models.html?subject=History", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] }
     ];
+
+    // A subject is considered available on the homepage only when it has
+    // at least one model of its own in the centralized 3D-model library.
+    // Subjects with no 3D content yet keep the original Coming Soon card
+    // behaviour instead of opening an empty models page.
+    var MODEL_SUBJECTS = {};
+    getAllModels().forEach(function (model) {
+        if (model && model.subject) MODEL_SUBJECTS[model.subject.toLowerCase()] = true;
+    });
+
+    SUBJECTS.forEach(function (subject) {
+        var hasOwnModels = !!MODEL_SUBJECTS[subject.name.toLowerCase()];
+        if (!hasOwnModels) {
+            subject.status = "soon";
+            subject.href = "#";
+        }
+    });
 
     var STORAGE_KEY = "vce_favorite_subjects";
     var COMPACT_COUNT = 3;
@@ -55,6 +80,7 @@
     var moreWrap = document.querySelector(".subjects-more-wrap");
     var moreBtn = document.getElementById("subjectsMoreBtn");
     var moreLabel = document.getElementById("subjectsMoreLabel");
+    var emptyState = document.getElementById("subjectsEmpty");
 
     if (!grid || !moreBtn) return;
 
@@ -83,8 +109,18 @@
     var favorites = loadFavorites(); // ids, in the order the student favorited them
     var expanded = false;
 
+    // Class/Stream/Exam context filter, set by ./classSelector.js. `null`
+    // means no selection has been made yet, so nothing is filtered out —
+    // the homepage behaves exactly as it did before that feature existed.
+    var filterIds = null;
+    var filterEmptyMessage = "";
+
     function isFav(id) {
         return favorites.indexOf(id) !== -1;
+    }
+
+    function filterAllowed(subject) {
+        return filterIds === null || filterIds.indexOf(subject.id) !== -1;
     }
 
     function buildCard(subject) {
@@ -195,11 +231,12 @@
     }
 
     function applyLayout() {
-        var order = sortedSubjects();
+        var fullOrder = sortedSubjects();
+        var order = fullOrder.filter(filterAllowed);
         var visibleIds = collapsedVisibleIds(order);
         var hasMore = order.length > Object.keys(visibleIds).length;
 
-        order.forEach(function (subject, i) {
+        fullOrder.forEach(function (subject, i) {
             var fav = isFav(subject.id);
 
             subject._el.style.order = i;
@@ -210,6 +247,15 @@
                 "aria-label",
                 (fav ? "Remove " : "Add ") + subject.name + (fav ? " from favorites" : " to favorites")
             );
+
+            // Class/Stream/Exam context excludes this subject entirely —
+            // it doesn't participate in the collapse/expand behaviour at all.
+            if (!filterAllowed(subject)) {
+                clearTimeout(subject._hideTimer);
+                subject._el.classList.remove("is-hiding", "is-revealing");
+                subject._el.classList.add("is-collapsed-hidden");
+                return;
+            }
 
             var shouldShow = expanded || !!visibleIds[subject.id];
 
@@ -238,6 +284,12 @@
         moreBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
         moreBtn.classList.toggle("is-expanded", expanded);
         if (moreLabel) moreLabel.textContent = expanded ? "Show Less" : "Show More";
+
+        if (emptyState) {
+            var nothingVisible = filterIds !== null && order.length === 0;
+            if (nothingVisible) emptyState.textContent = filterEmptyMessage;
+            emptyState.classList.toggle("show", nothingVisible);
+        }
     }
 
     function toggleFavorite(id) {
@@ -253,6 +305,16 @@
 
     moreBtn.addEventListener("click", function () {
         expanded = !expanded;
+        applyLayout();
+    });
+
+    // Fired by ./classSelector.js whenever the Class / Stream / Exam
+    // selection changes. `detail.ids` is either an array of subject ids to
+    // show, or null to show everything (no selection made yet).
+    document.addEventListener("vce:subjectfilter", function (e) {
+        var detail = e.detail || {};
+        filterIds = Array.isArray(detail.ids) ? detail.ids : null;
+        filterEmptyMessage = detail.emptyMessage || "";
         applyLayout();
     });
 
