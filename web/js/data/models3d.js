@@ -128,7 +128,7 @@ const MODELS = [
         description: "Explore interactive 3D molecular structures with ball-and-stick and space-fill views, atom inspection, and a built-in molecule library.",
         tags: ["molecule", "molecular structure", "3d", "atoms", "bonds", "chemistry"],
         status: MODEL_STATUS.AVAILABLE,
-        route: "./molecular-structure/index.html",
+        route: "/molecular-structure/",
         preview: null,
         frequency: 92,
         popularity: 85,

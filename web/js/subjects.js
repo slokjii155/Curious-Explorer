@@ -1,5 +1,3 @@
-import { getAllModels } from "./data/models3d.js";
-
 // Homepage "Subjects" section.
 //
 // Renders the subject cards from a single data list, then layers on:
@@ -54,23 +52,6 @@ import { getAllModels } from "./data/models3d.js";
         { id: "history", name: "History", icon: "📜", href: "./models.html?subject=History", status: "active",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] }
     ];
-
-    // A subject is considered available on the homepage only when it has
-    // at least one model of its own in the centralized 3D-model library.
-    // Subjects with no 3D content yet keep the original Coming Soon card
-    // behaviour instead of opening an empty models page.
-    var MODEL_SUBJECTS = {};
-    getAllModels().forEach(function (model) {
-        if (model && model.subject) MODEL_SUBJECTS[model.subject.toLowerCase()] = true;
-    });
-
-    SUBJECTS.forEach(function (subject) {
-        var hasOwnModels = !!MODEL_SUBJECTS[subject.name.toLowerCase()];
-        if (!hasOwnModels) {
-            subject.status = "soon";
-            subject.href = "#";
-        }
-    });
 
     var STORAGE_KEY = "vce_favorite_subjects";
     var COMPACT_COUNT = 3;
