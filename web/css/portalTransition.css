@@ -1,0 +1,168 @@
+/* ============================================================
+   PORTAL TRANSITION — shared cinematic page-transition styles
+   ============================================================
+   Reusable across pages: link this stylesheet + portalTransition.js
+   from any page, mark its main content wrapper with
+   [data-portal-content], and mark any link that should trigger the
+   effect with [data-portal]. Nothing here is specific to the 3D
+   Models destination — later pages/models can reuse the same
+   mechanism for their own entrances.
+
+   Reads --accent / --accent-2 / --accent-deep from whichever page
+   includes this file (each page already defines them in :root),
+   so the glass tint always matches that page's palette.
+   ============================================================ */
+
+body.portal-leaving,
+body.portal-entering{
+    /* Block interaction with the page underneath while the portal
+       overlay is doing its thing. */
+    cursor:progress;
+}
+
+[data-portal-content]{
+    transition:
+    filter .55s cubic-bezier(.4,0,.2,1),
+    transform .55s cubic-bezier(.4,0,.2,1),
+    opacity .5s ease;
+    will-change: filter, transform, opacity;
+}
+
+/* -------- leaving the current page (forward through the portal) -------- */
+
+body.portal-leaving [data-portal-content]{
+    filter: blur(7px) saturate(1.25) brightness(.88);
+    transform: scale(.965);
+    opacity:.5;
+}
+
+/* -------- arriving on the destination page -------- */
+/* Starts pulled-back/blurred the instant the page paints, then
+   "portal-entering-active" (added a frame later by JS) plays the
+   reveal. If JS never adds -active (e.g. script failed), the
+   no-portal-entering fallback below still shows the page. */
+
+body.portal-entering [data-portal-content]{
+    filter: blur(10px) saturate(1.2);
+    transform: scale(1.035);
+    opacity:0;
+}
+
+body.portal-entering-active [data-portal-content]{
+    filter: blur(0) saturate(1) brightness(1);
+    transform: scale(1);
+    opacity:1;
+}
+
+/* ================= overlay ================= */
+
+.portal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition: opacity .35s ease;
+}
+
+body.portal-leaving .portal-overlay,
+body.portal-entering .portal-overlay{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* the expanding/collapsing glass pane — a lens opening from the
+   button that was clicked (or closing back down to reveal the page
+   underneath), not a spinning vortex or ring */
+.portal-glass{
+    position:absolute;
+    inset:0;
+
+    background:
+    radial-gradient(closest-side, rgba(203,182,255,.4), color-mix(in srgb, var(--accent, #9b6bff) 55%, transparent) 42%, rgba(5,10,24,.94) 74%),
+    linear-gradient(160deg, rgba(255,255,255,.08), rgba(5,10,24,.88));
+
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+    clip-path: circle(0% at var(--portal-x, 50%) var(--portal-y, 50%));
+    transition: clip-path .85s cubic-bezier(.65,0,.35,1);
+}
+
+body.portal-leaving .portal-glass{
+    clip-path: circle(150% at var(--portal-x, 50%) var(--portal-y, 50%));
+}
+
+/* entrance starts already fully open (covering the page) with no
+   transition, then "-active" collapses it closed — the mirror image
+   of the leave animation */
+body.portal-entering .portal-glass{
+    clip-path: circle(150% at var(--portal-x, 50%) var(--portal-y, 50%));
+    transition:none;
+}
+
+body.portal-entering-active .portal-glass{
+    clip-path: circle(0% at var(--portal-x, 50%) var(--portal-y, 50%));
+    transition: clip-path .85s cubic-bezier(.65,0,.35,1);
+}
+
+/* a single restrained glint, not a flashy sweep loop */
+.portal-sweep{
+    position:absolute;
+    inset:-20%;
+
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,.45) 50%, transparent 58%);
+    transform: translateX(-140%) rotate(3deg);
+    opacity:0;
+
+    transition: transform .95s ease, opacity .5s ease;
+}
+
+body.portal-leaving .portal-sweep,
+body.portal-entering-active .portal-sweep{
+    transform: translateX(40%) rotate(3deg);
+    opacity:.75;
+}
+
+/* fine drifting motes converging into / spreading from the portal
+   origin — small and low-opacity on purpose */
+.portal-particles{
+    position:absolute;
+    inset:0;
+}
+
+.portal-particles span{
+    position:absolute;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+
+    background: var(--accent-2, #cbb6ff);
+    box-shadow: 0 0 10px var(--accent, #9b6bff);
+    opacity:0;
+}
+
+@keyframes portalDrift{
+    0%{ transform:translate(0,0) scale(.4); opacity:0; }
+    32%{ opacity:.9; }
+    100%{ transform:translate(var(--dx,0), var(--dy,0)) scale(1); opacity:0; }
+}
+
+body.portal-leaving .portal-particles span,
+body.portal-entering-active .portal-particles span{
+    animation: portalDrift .95s ease-out forwards;
+    animation-delay: var(--pd, 0s);
+}
+
+@media (prefers-reduced-motion: reduce){
+    [data-portal-content]{ transition: opacity .3s ease; }
+    body.portal-leaving [data-portal-content]{ filter:none; transform:none; opacity:.6; }
+    body.portal-entering [data-portal-content]{ filter:none; transform:none; opacity:0; }
+    body.portal-entering-active [data-portal-content]{ opacity:1; }
+    .portal-glass{ transition: opacity .3s ease; clip-path:none; opacity:0; }
+    body.portal-leaving .portal-glass, body.portal-entering .portal-glass{ opacity:1; }
+    body.portal-entering-active .portal-glass{ opacity:0; }
+    .portal-sweep, .portal-particles span{ display:none; }
+}

@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050816">
+<title>3D Models Library</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    /* Same Solo Leveling-inspired dark purple / indigo / lavender palette
+       used across the rest of the site, plus one teal accent for Biology. */
+    --accent:#9b6bff;
+    --accent-2:#cbb6ff;
+    --accent-deep:#3c1670;
+    --accent-blue:#5b8cff;
+    --accent-teal:#57e0c2;
+
+    --font-display:'Sora', 'Segoe UI', sans-serif;
+    --font-body:'Inter', 'Segoe UI', sans-serif;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:var(--font-body);
+    font-weight:400;
+    letter-spacing:.1px;
+    color:white;
+
+    background:#050816;
+    position:relative;
+    min-height:100vh;
+
+    padding:
+    max(20px, env(safe-area-inset-top))
+    max(20px, env(safe-area-inset-right))
+    max(40px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
+}
+
+.bg-layer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+
+    background:
+    radial-gradient(circle at 18% 12%, rgba(155,107,255,.16), transparent 55%),
+    radial-gradient(circle at 85% 78%, rgba(60,22,112,.16), transparent 55%),
+    #050816;
+}
+
+/* ================= Page shell ================= */
+
+.models-page{
+    position:relative;
+    z-index:2;
+
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+}
+
+.models-page-header{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:10px 0 26px;
+}
+
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    align-self:flex-start;
+
+    font-family:var(--font-display);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.6);
+    text-decoration:none;
+
+    padding:8px 14px;
+    border-radius:999px;
+
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.14);
+
+    transition: color .25s ease, border-color .25s ease, background .25s ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible{
+    color:#fff;
+    border-color:rgba(255,255,255,.32);
+    background:rgba(255,255,255,.08);
+    outline:none;
+}
+
+.models-page-title{
+    font-family:var(--font-display);
+    font-size:clamp(24px, 4vw, 34px);
+    font-weight:800;
+    letter-spacing:.2px;
+    background:linear-gradient(135deg, #fff, var(--accent-2) 70%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.models-page-subtitle{
+    max-width:640px;
+    font-size:13.5px;
+    line-height:1.6;
+    color:rgba(255,255,255,.55);
+}
+
+/* ================= Filter bar ================= */
+/* Premium transparent glossy glass, matching the display-case
+   language of the cards below. Filters query the centralized model
+   dataset — they never hold their own copy of model data; see the
+   comment on #modelsFilterBar below and ./js/data/models3d.js. */
+
+.mc-filterbar{
+    display:flex;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:20px;
+}
+
+.mc-filter-field{
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+
+    min-width:180px;
+}
+
+.mc-filter-field label{
+    font-family:var(--font-display);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.5);
+    padding-left:2px;
+}
+
+.mc-filter-select{
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:100%;
+    padding:10px 34px 10px 14px;
+    border-radius:13px;
+
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:600;
+    color:rgba(255,255,255,.92);
+
+    background: linear-gradient(150deg, rgba(255,255,255,.12), rgba(9,18,38,.5) 55%, rgba(5,10,24,.62));
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+
+    border:1px solid rgba(155,107,255,.32);
+    border-top:1px solid rgba(255,255,255,.4);
+
+    box-shadow:
+    0 10px 26px rgba(0,0,0,.4),
+    inset 0 1px 1px rgba(255,255,255,.2);
+
+    transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    cursor:pointer;
+}
+
+.mc-filter-select:hover{
+    border-color:rgba(155,107,255,.55);
+}
+
+.mc-filter-select:focus-visible{
+    outline:none;
+    border-color:rgba(155,107,255,.75);
+    box-shadow:
+    0 10px 26px rgba(0,0,0,.4),
+    0 0 0 3px rgba(155,107,255,.28),
+    inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+.mc-filter-select:disabled{
+    cursor:not-allowed;
+    color:rgba(255,255,255,.35);
+    background: linear-gradient(150deg, rgba(255,255,255,.05), rgba(9,18,38,.4) 55%, rgba(5,10,24,.5));
+}
+
+.mc-filter-select option{
+    background:#0b1224;
+    color:#fff;
+}
+
+.mc-filter-arrow{
+    position:absolute;
+    right:13px;
+    bottom:11px;
+    font-size:10px;
+    color:rgba(255,255,255,.45);
+    pointer-events:none;
+}
+
+.mc-filter-clear{
+    padding:10px 16px;
+    border-radius:13px;
+
+    font-family:var(--font-display);
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,.75);
+
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.16);
+
+    cursor:pointer;
+    transition: border-color .25s ease, color .25s ease, background .25s ease;
+}
+
+.mc-filter-clear:hover,
+.mc-filter-clear:focus-visible{
+    color:#fff;
+    border-color:rgba(255,255,255,.35);
+    background: rgba(255,255,255,.08);
+    outline:none;
+}
+
+.mc-filter-empty{
+    padding:26px 18px;
+    margin-bottom:6px;
+    border-radius:16px;
+    text-align:center;
+
+    font-size:13px;
+    color:rgba(255,255,255,.55);
+
+    background: rgba(255,255,255,.03);
+    border:1px dashed rgba(255,255,255,.14);
+}
+
+.mc-filter-empty-clear{
+    color: var(--accent-2);
+    font-weight:700;
+    text-decoration:underline;
+    text-underline-offset:2px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:inherit;
+}
+
+@media(max-width:520px){
+    .mc-filterbar{ gap:10px; }
+    .mc-filter-field{ min-width:0; flex:1 1 120px; }
+    .mc-filter-clear{ flex:1 0 100%; text-align:center; }
+}
+
+/* ================= Premium model cards =================
+   Each card is a "glass display case" for exactly one model: a lit
+   glass box on top (.mc-preview, holding a small rotating crystal
+   that stands in for the model's 3D subject) over a plinth of card
+   details. Subject sets the case's accent color via --card-accent,
+   written inline per card by renderModelCards() below — nothing
+   here is hard-coded to a specific subject or model. */
+
+.models-grid{
+    --mc-card-max: 300px;
+
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, var(--mc-card-max)));
+    justify-content:center;
+    gap:20px;
+}
+
+.model-card{
+    --card-accent: var(--accent);
+    --tiltX: 0deg;
+    --tiltY: 0deg;
+
+    position:relative;
+
+    width:100%;
+    max-width:var(--mc-card-max);
+    margin:0 auto;
+
+    border-radius:22px;
+
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+    text-decoration:none;
+    color:inherit;
+
+    background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(9,18,38,.58) 45%, rgba(5,10,24,.74));
+
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+
+    border:1px solid rgba(155,107,255,.32);
+    border-top:1px solid rgba(255,255,255,.42);
+
+    box-shadow:
+    0 18px 44px rgba(0,0,0,.55),
+    0 0 26px rgba(155,107,255,.12),
+    inset 0 1px 1px rgba(255,255,255,.2);
+
+    transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateY(0) scale(1);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .4s ease;
+    will-change: transform;
+}
+
+.model-card[hidden]{
+    display:none;
+}
+
+.mc-preview{
+    position:relative;
+    height:128px;
+    margin:14px 14px 0;
+    border-radius:16px;
+    overflow:hidden;
+
+    background:
+    radial-gradient(120% 140% at 26% 18%, color-mix(in srgb, var(--card-accent) 30%, transparent), transparent 62%),
+    linear-gradient(165deg, rgba(255,255,255,.10), rgba(5,10,24,.55));
+
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.28),
+    inset 0 -22px 30px rgba(0,0,0,.4);
+}
+
+.mc-preview::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-10px;
+    width:74%;
+    height:36px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--card-accent) 65%, transparent), transparent 75%);
+    filter: blur(2px);
+    opacity:.55;
+}
+
+.mc-preview::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(115deg, transparent 34%, rgba(255,255,255,.30) 49%, transparent 64%);
+    transform: translateX(calc(var(--mx, 50%) - 50%));
+    opacity:.18;
+    transition: opacity .4s ease;
+    pointer-events:none;
+}
+
+.mc-stage{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:340px;
+}
+
+.mc-crystal{
+    position:relative;
+    width:52px;
+    height:52px;
+    transform-style:preserve-3d;
+    animation: crystalSpin 10s linear infinite;
+}
+
+.mc-crystal .facet{
+    position:absolute;
+    inset:0;
+    border-radius:10px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--card-accent) 85%, white 15%), color-mix(in srgb, var(--card-accent) 55%, #050816 45%));
+    border:1px solid rgba(255,255,255,.5);
+    box-shadow: inset 0 2px 4px rgba(255,255,255,.5), inset 0 -8px 12px rgba(0,0,0,.35);
+    opacity:.88;
+}
+
+.mc-crystal .facet.f1{ transform:rotateY(0deg) translateZ(20px); }
+.mc-crystal .facet.f2{ transform:rotateY(90deg) translateZ(20px); }
+.mc-crystal .facet.f3{ transform:rotateY(180deg) translateZ(20px); }
+.mc-crystal .facet.f4{ transform:rotateY(270deg) translateZ(20px); }
+.mc-crystal .facet.f5{ transform:rotateX(90deg) translateZ(20px); opacity:.6; }
+
+@keyframes crystalSpin{
+    from{ transform:rotateY(0deg) rotateX(8deg); }
+    to{ transform:rotateY(360deg) rotateX(8deg); }
+}
+
+.mc-tag{
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:26px;
+    height:26px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+
+    background: rgba(5,10,24,.55);
+    border:1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(6px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+.mc-body{
+    padding:14px 18px 4px;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.mc-name{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.2px;
+    line-height:1.25;
+
+    color: rgba(255,255,255,.95);
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+}
+
+.mc-meta{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px 8px;
+    font-size:11px;
+}
+
+.mc-meta-subject{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    letter-spacing:.3px;
+    color: color-mix(in srgb, var(--card-accent) 78%, white 22%);
+}
+
+.mc-meta-subject::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background: var(--card-accent);
+    box-shadow: 0 0 8px var(--card-accent);
+}
+
+.mc-meta-topic{
+    color:rgba(255,255,255,.5);
+}
+
+.mc-meta-class{
+    margin-left:auto;
+    flex:0 0 auto;
+
+    font-family:var(--font-display);
+    font-weight:700;
+    letter-spacing:.3px;
+    font-size:10px;
+    text-transform:uppercase;
+    white-space:nowrap;
+
+    padding:3px 8px;
+    border-radius:999px;
+
+    color:rgba(255,255,255,.6);
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14);
+}
+
+.mc-desc{
+    font-size:12.5px;
+    line-height:1.5;
+    color:rgba(255,255,255,.62);
+}
+
+.mc-footer{
+    margin-top:auto;
+    padding:14px 18px 18px;
+}
+
+.mc-action{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    padding:10px 14px;
+    border-radius:12px;
+
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:.4px;
+}
+
+.mc-action.is-available{
+    color:#04121c;
+    background: linear-gradient(145deg, var(--accent-2), var(--accent) 70%);
+    border:1px solid rgba(255,255,255,.5);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 8px 20px rgba(155,107,255,.28);
+    transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.mc-action.is-soon{
+    color:rgba(255,255,255,.42);
+    text-transform:uppercase;
+    background: rgba(255,255,255,.03);
+    border:1px dashed rgba(255,255,255,.18);
+    letter-spacing:.7px;
+    font-size:10.5px;
+}
+
+.model-card.mc-active{
+    cursor:pointer;
+}
+
+.model-card.mc-active:hover,
+.model-card.mc-active:focus-visible{
+    transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateY(-7px) scale(1.015);
+    border-color: color-mix(in srgb, var(--card-accent) 60%, rgba(255,255,255,.55));
+    box-shadow:
+    0 30px 62px rgba(0,0,0,.6),
+    0 0 40px color-mix(in srgb, var(--card-accent) 40%, transparent),
+    inset 0 1px 1px rgba(255,255,255,.3);
+}
+
+.model-card.mc-active:hover .mc-preview::after{ opacity:.5; }
+.model-card.mc-active:hover .mc-crystal{ animation-duration:3s; }
+.model-card.mc-active:hover .mc-preview::before{ opacity:.8; }
+
+.model-card.mc-soon{
+    cursor:default;
+}
+
+.model-card.mc-soon .mc-preview{
+    filter:grayscale(.55) brightness(.8);
+}
+
+.model-card.mc-soon .mc-crystal{
+    animation-duration:22s;
+    opacity:.7;
+}
+
+.model-card.mc-soon .mc-name{
+    color:rgba(255,255,255,.78);
+}
+
+.model-card.mc-soon:hover{
+    border-color:rgba(255,255,255,.22);
+    box-shadow:
+    0 20px 46px rgba(0,0,0,.55),
+    0 0 22px rgba(255,255,255,.06),
+    inset 0 1px 1px rgba(255,255,255,.2);
+}
+
+@media (prefers-reduced-motion: reduce){
+    .mc-crystal{ animation:none; }
+    .model-card{ transition:box-shadow .3s ease, border-color .3s ease; }
+}
+
+@media(max-width:1024px){
+    .models-grid{ --mc-card-max: 280px; grid-template-columns:repeat(auto-fill, minmax(200px, var(--mc-card-max))); gap:16px; }
+}
+
+@media(max-width:768px){
+    .models-grid{ grid-template-columns:repeat(2, minmax(0, var(--mc-card-max))); gap:14px; }
+    .mc-preview{ height:108px; }
+}
+
+@media(max-width:520px){
+    .models-grid{ grid-template-columns:minmax(0, 1fr); }
+    .model-card{ max-width:340px; }
+}
+
+</style>
+<link rel="stylesheet" href="./css/portalTransition.css">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+
+<div class="models-page" data-portal-content>
+
+    <div class="models-page-header">
+        <a class="back-link" href="./index.html" data-portal>← Back</a>
+        <h1 class="models-page-title">3D Models Library</h1>
+        <p class="models-page-subtitle">
+            Every interactive 3D model in one place. Filter by subject, class and
+            topic, then open any available model directly — nothing here is a
+            subject folder, each card is one model.
+        </p>
+    </div>
+
+    <!-- Filters query the SAME centralized model dataset
+         (./js/data/models3d.js) — they never hold their own copy of
+         model data, only the option lists in
+         ./js/data/filterTaxonomy.js and the current selection. -->
+    <div class="mc-filterbar" id="modelsFilterBar">
+
+        <div class="mc-filter-field">
+            <label for="filterSubject">Subject</label>
+            <select id="filterSubject" class="mc-filter-select"></select>
+            <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+        </div>
+
+        <div class="mc-filter-field">
+            <label for="filterClass">Class</label>
+            <select id="filterClass" class="mc-filter-select"></select>
+            <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+        </div>
+
+        <div class="mc-filter-field">
+            <label for="filterTopic">Topic</label>
+            <select id="filterTopic" class="mc-filter-select" disabled></select>
+            <span class="mc-filter-arrow" aria-hidden="true">▾</span>
+        </div>
+
+        <button type="button" class="mc-filter-clear" id="modelsClearFiltersBtn">
+            Clear Filters
+        </button>
+
+    </div>
+
+    <div class="mc-filter-empty" id="modelsFilterEmpty" hidden>
+        No models match these filters yet — try a different combination or
+        <button type="button" class="mc-filter-empty-clear" id="modelsFilterEmptyClear">clear filters</button>.
+    </div>
+
+    <!-- Populated entirely from ./js/data/models3d.js by
+         renderModelCards() below — one card per MODEL, never per
+         subject. Adding a new model to the library never requires
+         touching this markup. -->
+    <div class="models-grid" id="modelsGrid"></div>
+
+</div>
+
+<script type="module">
+
+import { getAllModels, filterModels, sortModels } from "./js/data/models3d.js";
+import { SUBJECTS, CLASS_OPTIONS, getTopicOptions } from "./js/data/filterTaxonomy.js";
+
+//====================================================
+// Card builder — shared "glass display case" for every model,
+// available or coming-soon. Generated purely from model data.
+//====================================================
+
+const SUBJECT_ICON = {
+    "Chemistry": "⚛",
+    "Physics": "🪐",
+    "Biology": "🧬"
+};
+
+const SUBJECT_ACCENT_VAR = {
+    "Chemistry": "var(--accent)",
+    "Physics": "var(--accent-blue)",
+    "Biology": "var(--accent-teal)"
+};
+
+function iconForModel(model){
+    return SUBJECT_ICON[model.subject] || "🧭";
+}
+
+function accentForModel(model){
+    return SUBJECT_ACCENT_VAR[model.subject] || "var(--accent)";
+}
+
+function classLabel(classes){
+    if (!Array.isArray(classes) || classes.length === 0) return "";
+    const min = Math.min(...classes);
+    const max = Math.max(...classes);
+    return "Class " + (min === max ? String(min) : min + "–" + max);
+}
+
+const prefersReducedMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Pointer-tracked lift/tilt/sheen for available cards only — cheap
+// even at library scale, since "available" models are always a
+// small subset of the whole library.
+function attachTilt(card){
+    if (prefersReducedMotion) return;
+
+    const maxTilt = 7;
+
+    function handleMove(e){
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+
+        card.style.setProperty("--tiltX", ((0.5 - py) * maxTilt * 2).toFixed(2) + "deg");
+        card.style.setProperty("--tiltY", ((px - 0.5) * maxTilt * 2).toFixed(2) + "deg");
+        card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+    }
+
+    function reset(){
+        card.style.setProperty("--tiltX", "0deg");
+        card.style.setProperty("--tiltY", "0deg");
+    }
+
+    card.addEventListener("pointermove", handleMove);
+    card.addEventListener("pointerleave", reset);
+    card.addEventListener("blur", reset);
+}
+
+function buildPreview(model){
+    const preview = document.createElement("div");
+    preview.className = "mc-preview";
+
+    const stage = document.createElement("div");
+    stage.className = "mc-stage";
+
+    const crystal = document.createElement("div");
+    crystal.className = "mc-crystal";
+    ["f1", "f2", "f3", "f4", "f5"].forEach((f) => {
+        const facet = document.createElement("div");
+        facet.className = "facet " + f;
+        crystal.appendChild(facet);
+    });
+
+    stage.appendChild(crystal);
+    preview.appendChild(stage);
+
+    const tag = document.createElement("div");
+    tag.className = "mc-tag";
+    tag.textContent = iconForModel(model);
+    preview.appendChild(tag);
+
+    return preview;
+}
+
+// Clicking an available card navigates straight to that model's
+// route. Coming-soon cards render as a plain <div> with no href —
+// there is no route to click, so there is nothing to break.
+function buildModelCard(model){
+
+    const available = model.status === "available";
+
+    const el = document.createElement(available ? "a" : "div");
+    el.className = "model-card " + (available ? "mc-active" : "mc-soon");
+    el.setAttribute("data-model-id", model.id);
+    el.setAttribute("data-subject", model.subject);
+    el.style.setProperty("--card-accent", accentForModel(model));
+
+    if (available) {
+        el.href = model.route;
+        el.setAttribute("tabindex", "0");
+    } else {
+        el.setAttribute("aria-disabled", "true");
+    }
+
+    el.appendChild(buildPreview(model));
+
+    const body = document.createElement("div");
+    body.className = "mc-body";
+
+    const name = document.createElement("div");
+    name.className = "mc-name";
+    name.textContent = model.name;
+    body.appendChild(name);
+
+    const meta = document.createElement("div");
+    meta.className = "mc-meta";
+
+    const subjectEl = document.createElement("span");
+    subjectEl.className = "mc-meta-subject";
+    subjectEl.textContent = model.subject;
+    meta.appendChild(subjectEl);
+
+    if (model.topic) {
+        const topicEl = document.createElement("span");
+        topicEl.className = "mc-meta-topic";
+        topicEl.textContent = "• " + model.topic;
+        meta.appendChild(topicEl);
+    }
+
+    const classEl = document.createElement("span");
+    classEl.className = "mc-meta-class";
+    classEl.textContent = classLabel(model.classes);
+    meta.appendChild(classEl);
+
+    body.appendChild(meta);
+
+    const desc = document.createElement("div");
+    desc.className = "mc-desc";
+    desc.textContent = model.description || "";
+    body.appendChild(desc);
+
+    el.appendChild(body);
+
+    const footer = document.createElement("div");
+    footer.className = "mc-footer";
+
+    const action = document.createElement("span");
+    action.className = "mc-action " + (available ? "is-available" : "is-soon");
+    action.textContent = available ? "Explore →" : "◇ Coming Soon";
+    footer.appendChild(action);
+
+    el.appendChild(footer);
+
+    if (available) attachTilt(el);
+
+    return el;
+}
+
+//====================================================
+// Filter bar — Subject / Class / Topic
+//
+// Every render pass calls filterModels() from
+// ./js/data/models3d.js against the one centralized dataset; this
+// section only tracks which options are selected and rebuilds the
+// grid from whatever that call returns.
+//====================================================
+
+const filterSubjectEl = document.getElementById("filterSubject");
+const filterClassEl = document.getElementById("filterClass");
+const filterTopicEl = document.getElementById("filterTopic");
+const filterClearBtn = document.getElementById("modelsClearFiltersBtn");
+const filterEmptyEl = document.getElementById("modelsFilterEmpty");
+const filterEmptyClearBtn = document.getElementById("modelsFilterEmptyClear");
+const gridEl = document.getElementById("modelsGrid");
+
+function populateFilterOptions(){
+
+    const subjectAll = document.createElement("option");
+    subjectAll.value = "all";
+    subjectAll.textContent = "All Subjects";
+    filterSubjectEl.appendChild(subjectAll);
+
+    SUBJECTS.forEach((subject) => {
+        const opt = document.createElement("option");
+        opt.value = subject;
+        opt.textContent = subject;
+        filterSubjectEl.appendChild(opt);
+    });
+
+    CLASS_OPTIONS.forEach((entry) => {
+        const opt = document.createElement("option");
+        opt.value = String(entry.value);
+        opt.textContent = entry.label;
+        filterClassEl.appendChild(opt);
+    });
+
+    refreshTopicOptions();
+}
+
+function parseClassValue(raw){
+    if (raw === "all" || raw === "") return "all";
+    return /^\d+$/.test(raw) ? Number(raw) : raw;
+}
+
+function refreshTopicOptions(){
+    const subject = filterSubjectEl.value;
+    const classValue = parseClassValue(filterClassEl.value);
+    const topics = getTopicOptions(subject, classValue);
+    const previousValue = filterTopicEl.value;
+
+    filterTopicEl.innerHTML = "";
+
+    const allOpt = document.createElement("option");
+    allOpt.value = "all";
+    allOpt.textContent = "All Topics";
+    filterTopicEl.appendChild(allOpt);
+
+    topics.forEach((topic) => {
+        const opt = document.createElement("option");
+        opt.value = topic;
+        opt.textContent = topic;
+        filterTopicEl.appendChild(opt);
+    });
+
+    filterTopicEl.value = topics.indexOf(previousValue) !== -1 ? previousValue : "all";
+    filterTopicEl.disabled = topics.length === 0;
+}
+
+function getSelectedCriteria(){
+    const criteria = {};
+
+    if (filterSubjectEl.value !== "all") criteria.subject = filterSubjectEl.value;
+    if (filterClassEl.value !== "all") criteria.classLevel = parseClassValue(filterClassEl.value);
+    if (!filterTopicEl.disabled && filterTopicEl.value !== "all") criteria.topic = filterTopicEl.value;
+
+    return criteria;
+}
+
+function renderModelCards(){
+    const criteria = getSelectedCriteria();
+    const matches = sortModels(filterModels(criteria), "priority", "desc");
+
+    gridEl.innerHTML = "";
+    matches.forEach((model) => gridEl.appendChild(buildModelCard(model)));
+
+    filterEmptyEl.hidden = matches.length !== 0;
+}
+
+function clearModelFilters(){
+    filterSubjectEl.value = "all";
+    filterClassEl.value = "all";
+    refreshTopicOptions();
+    renderModelCards();
+}
+
+filterSubjectEl.addEventListener("change", () => { refreshTopicOptions(); renderModelCards(); });
+filterClassEl.addEventListener("change", () => { refreshTopicOptions(); renderModelCards(); });
+filterTopicEl.addEventListener("change", renderModelCards);
+filterClearBtn.addEventListener("click", clearModelFilters);
+filterEmptyClearBtn.addEventListener("click", clearModelFilters);
+
+populateFilterOptions();
+renderModelCards();
+
+</script>
+
+<!-- Reusable cinematic transition overlay (./css/portalTransition.css,
+     ./js/portalTransition.js) — the same generic mechanism the
+     homepage uses, not something specific to this page. -->
+<div class="portal-overlay" id="portalOverlay" aria-hidden="true">
+    <div class="portal-glass"></div>
+    <div class="portal-sweep"></div>
+    <div class="portal-particles">
+        <span style="top:22%; left:30%; --dx:-60px; --dy:-40px; --pd:0s;"></span>
+        <span style="top:65%; left:18%; --dx:-50px; --dy:30px; --pd:.04s;"></span>
+        <span style="top:38%; left:74%; --dx:60px; --dy:-20px; --pd:.02s;"></span>
+        <span style="top:80%; left:60%; --dx:40px; --dy:50px; --pd:.08s;"></span>
+        <span style="top:15%; left:55%; --dx:20px; --dy:-60px; --pd:.06s;"></span>
+        <span style="top:50%; left:8%; --dx:-70px; --dy:0px; --pd:.1s;"></span>
+        <span style="top:70%; left:85%; --dx:50px; --dy:40px; --pd:.03s;"></span>
+        <span style="top:10%; left:78%; --dx:40px; --dy:-50px; --pd:.09s;"></span>
+        <span style="top:88%; left:35%; --dx:-30px; --dy:60px; --pd:.05s;"></span>
+        <span style="top:45%; left:92%; --dx:60px; --dy:10px; --pd:.07s;"></span>
+    </div>
+</div>
+
+<script type="module">
+import { initPortalLinks, portalRevealOnLoad } from "./js/portalTransition.js";
+initPortalLinks();
+portalRevealOnLoad();
+</script>
+
+</body>
+</html>

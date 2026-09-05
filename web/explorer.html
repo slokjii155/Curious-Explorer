@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050816">
+
+<title>
+Visual Chemistry Explorer
+</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================
+     TOP TOOLBAR
+===================== -->
+
+
+<div id="topBar">
+
+
+<div class="title">
+
+⚛ Visual Chemistry Explorer
+
+</div>
+
+
+
+<select
+id="modelSelect"
+class="toolbarSelect"
+>
+
+
+<option value="bohr">
+
+⚛ Bohr Model
+
+</option>
+
+
+<option value="quantum">
+
+☁ Quantum Orbital Model
+
+</option>
+
+
+</select>
+
+
+
+
+
+<select
+id="elementSelect"
+class="toolbarSelect"
+>
+
+
+<option value="">
+
+Select Element
+
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+<!-- =====================
+     ELECTRON SPEED (bottom-left, hideable)
+===================== -->
+
+<div id="speedControlWrap" class="speed-control-wrap">
+
+<div class="speedControl" id="speedControl">
+
+<label>
+Electron Speed
+</label>
+
+<input
+
+id="speedSlider"
+
+type="range"
+
+min="0.2"
+
+max="3"
+
+step="0.1"
+
+value="1"
+
+/>
+
+</div>
+
+<button
+
+id="speedToggleBtn"
+
+class="speed-toggle-btn"
+
+type="button"
+
+aria-label="Show or hide the electron speed control"
+
+aria-pressed="true"
+
+>
+
+<svg class="speed-toggle-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="eye-open" d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12Z"></path>
+<circle class="eye-open" cx="12" cy="12" r="3"></circle>
+<path class="eye-slash" d="M3 3l18 18"></path>
+</svg>
+
+</button>
+
+</div>
+
+
+<!-- =====================
+     WELCOME SCREEN
+===================== -->
+
+
+<div id="welcomeScreen">
+
+
+<div class="welcome-orb orb1"></div>
+
+<div class="welcome-orb orb2"></div>
+
+<div class="welcome-orb orb3"></div>
+
+
+
+
+<div class="welcome-icon">
+
+⚛
+
+</div>
+
+
+
+
+<h1>
+
+Welcome to
+
+<span>
+
+Visual Chemistry Explorer
+
+</span>
+
+</h1>
+
+
+
+
+<p>
+
+Select an element to explore its atomic structure
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+<!-- =====================
+     PROPERTIES PANEL
+===================== -->
+
+
+<div
+
+id="propertiesPanel"
+
+class="properties-panel"
+
+style="display:none"
+
+>
+
+
+</div>
+
+
+<!-- =====================
+     PANEL SHOW/HIDE TOGGLE
+===================== -->
+
+<button
+
+id="panelToggleBtn"
+
+class="panel-toggle-btn"
+
+style="display:none"
+
+type="button"
+
+aria-label="Show or hide the atom details panel"
+
+aria-pressed="true"
+
+>
+
+<span class="toggle-icon">⟩</span>
+
+</button>
+
+
+
+
+
+
+<script
+
+type="module"
+
+src="./js/main.js">
+
+</script>
+
+<script src="./js/letterGlow.js"></script>
+
+
+</body>
+
+
+</html>
