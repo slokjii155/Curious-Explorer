@@ -27,24 +27,18 @@
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
         { id: "biology", name: "Biology", icon: "🧬", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-<<<<<<< HEAD
         { id: "science", name: "Science", icon: "🔬", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
         { id: "math", name: "Mathematics", icon: "📐", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
         { id: "computer-science", name: "Computer Science", icon: "💻", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
         { id: "english", name: "English", icon: "📖", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-<<<<<<< HEAD
         { id: "hindi", name: "Hindi", icon: "अ", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
         { id: "evs", name: "Environmental Studies", icon: "🌱", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
         { id: "economics", name: "Economics", icon: "📈", href: "#", status: "soon",
             chapters: [], materials: [], simulations: [], models3d: [], practice: [], aiTools: [] },
         { id: "accountancy", name: "Accountancy", icon: "🧾", href: "#", status: "soon",
@@ -67,10 +61,7 @@
     var moreWrap = document.querySelector(".subjects-more-wrap");
     var moreBtn = document.getElementById("subjectsMoreBtn");
     var moreLabel = document.getElementById("subjectsMoreLabel");
-<<<<<<< HEAD
     var emptyState = document.getElementById("subjectsEmpty");
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 
     if (!grid || !moreBtn) return;
 
@@ -99,26 +90,20 @@
     var favorites = loadFavorites(); // ids, in the order the student favorited them
     var expanded = false;
 
-<<<<<<< HEAD
     // Class/Stream/Exam context filter, set by ./classSelector.js. `null`
     // means no selection has been made yet, so nothing is filtered out —
     // the homepage behaves exactly as it did before that feature existed.
     var filterIds = null;
     var filterEmptyMessage = "";
 
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     function isFav(id) {
         return favorites.indexOf(id) !== -1;
     }
 
-<<<<<<< HEAD
     function filterAllowed(subject) {
         return filterIds === null || filterIds.indexOf(subject.id) !== -1;
     }
 
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     function buildCard(subject) {
         var a = document.createElement("a");
         a.className = "subject-card";
@@ -227,20 +212,12 @@
     }
 
     function applyLayout() {
-<<<<<<< HEAD
         var fullOrder = sortedSubjects();
         var order = fullOrder.filter(filterAllowed);
         var visibleIds = collapsedVisibleIds(order);
         var hasMore = order.length > Object.keys(visibleIds).length;
 
         fullOrder.forEach(function (subject, i) {
-=======
-        var order = sortedSubjects();
-        var visibleIds = collapsedVisibleIds(order);
-        var hasMore = order.length > Object.keys(visibleIds).length;
-
-        order.forEach(function (subject, i) {
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
             var fav = isFav(subject.id);
 
             subject._el.style.order = i;
@@ -252,7 +229,6 @@
                 (fav ? "Remove " : "Add ") + subject.name + (fav ? " from favorites" : " to favorites")
             );
 
-<<<<<<< HEAD
             // Class/Stream/Exam context excludes this subject entirely —
             // it doesn't participate in the collapse/expand behaviour at all.
             if (!filterAllowed(subject)) {
@@ -262,8 +238,6 @@
                 return;
             }
 
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
             var shouldShow = expanded || !!visibleIds[subject.id];
 
             if (shouldShow) {
@@ -291,15 +265,12 @@
         moreBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
         moreBtn.classList.toggle("is-expanded", expanded);
         if (moreLabel) moreLabel.textContent = expanded ? "Show Less" : "Show More";
-<<<<<<< HEAD
 
         if (emptyState) {
             var nothingVisible = filterIds !== null && order.length === 0;
             if (nothingVisible) emptyState.textContent = filterEmptyMessage;
             emptyState.classList.toggle("show", nothingVisible);
         }
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     }
 
     function toggleFavorite(id) {
@@ -318,7 +289,6 @@
         applyLayout();
     });
 
-<<<<<<< HEAD
     // Fired by ./classSelector.js whenever the Class / Stream / Exam
     // selection changes. `detail.ids` is either an array of subject ids to
     // show, or null to show everything (no selection made yet).
@@ -329,7 +299,5 @@
         applyLayout();
     });
 
-=======
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     applyLayout();
 })();
