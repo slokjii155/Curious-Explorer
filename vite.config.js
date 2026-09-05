@@ -8,7 +8,8 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, "web/index.html"),
                 chemistry: resolve(__dirname, "web/chemistry.html"),
-                explorer: resolve(__dirname, "web/explorer.html")
+                explorer: resolve(__dirname, "web/explorer.html"),
+                models: resolve(__dirname, "web/models.html")
             }
         }
     }
