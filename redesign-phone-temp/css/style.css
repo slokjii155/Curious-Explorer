@@ -1,11 +1,8 @@
 :root{
 
-    /* Solo Leveling-inspired dark purple / indigo / lavender palette,
-       with cool electric blue kept strictly as a minor secondary accent */
-    --accent:#9b6bff;
-    --accent-2:#cbb6ff;
-    --accent-deep:#3c1670;
-    --accent-blue:#5b8cff;
+    --accent:#00d4ff;
+    --accent-2:#7df9ff;
+    --accent-deep:#0090c9;
 
     --glass-hi: rgba(255,255,255,.22);
     --glass-lo: rgba(8,14,30,.55);
@@ -47,14 +44,13 @@ body{
     -webkit-text-size-adjust:100%;
 
     font-family:
-    "Inter",
     "Segoe UI",
     Arial,
     sans-serif;
 
     background:
-    radial-gradient(circle at 20% 15%, rgba(155,107,255,.10), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(60,22,112,.10), transparent 55%),
+    radial-gradient(circle at 20% 15%, rgba(0,212,255,.10), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(0,144,201,.10), transparent 55%),
     #050816;
 
     color:white;
@@ -113,14 +109,18 @@ TOP BAR
     letter-spacing:2px;
 
 
-    color: rgba(255,255,255,.94);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent-2) 55%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 
     text-shadow:
 
-    0 0 15px rgba(155,107,255,.5),
-    0 0 30px rgba(155,107,255,.25);
+    0 0 15px rgba(0,212,255,.5),
+    0 0 30px rgba(0,212,255,.25);
 
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
+
 
 }
 
@@ -155,7 +155,7 @@ GLASS BUTTONS
 
     border:
 
-    1px solid rgba(155,107,255,.5);
+    1px solid rgba(0,212,255,.5);
     border-top: 1px solid rgba(255,255,255,.55);
     border-left: 1px solid rgba(255,255,255,.25);
 
@@ -165,7 +165,7 @@ GLASS BUTTONS
 
 
     0 10px 30px rgba(0,0,0,.45),
-    0 0 25px rgba(155,107,255,.25),
+    0 0 25px rgba(0,212,255,.25),
     inset 0 1px 1px rgba(255,255,255,.35),
     inset 0 -12px 20px rgba(0,0,0,.3),
     inset 0 0 20px rgba(255,255,255,.05);
@@ -246,27 +246,7 @@ GLASS BUTTONS
 
 
 
-/* SPEED — floating bottom-left pill, independent of the top bar */
-
-
-.speed-control-wrap{
-
-    position:fixed;
-
-    left:calc(20px + env(safe-area-inset-left));
-    bottom:calc(20px + env(safe-area-inset-bottom));
-
-    z-index:32;
-
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-}
-
-
-.speed-toggle-btn{ order:1; }
-.speedControl{ order:2; }
+/* SPEED */
 
 
 .speedControl{
@@ -282,108 +262,6 @@ GLASS BUTTONS
 
     10px 18px;
 
-    transition: opacity .3s ease, transform .35s cubic-bezier(.4,0,.2,1), visibility .3s ease;
-
-}
-
-
-/* collapsed / hidden state — the pill tucks away, leaving just the toggle */
-.speed-control-wrap.collapsed .speedControl{
-
-    opacity:0;
-    transform:translateX(-18px) scale(.92);
-    visibility:hidden;
-    pointer-events:none;
-
-}
-
-
-/* small round glass toggle that shows/hides the speed pill —
-   a cute eye icon rather than an emoji */
-.speed-toggle-btn{
-
-    flex:0 0 auto;
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    color:rgba(255,255,255,.9);
-
-    background:
-    linear-gradient(160deg, rgba(30,45,80,.6), rgba(10,16,32,.7));
-
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-
-    border:1px solid rgba(155,107,255,.5);
-    border-top:1px solid rgba(255,255,255,.55);
-
-    box-shadow:
-    0 10px 26px rgba(0,0,0,.45),
-    0 0 20px rgba(155,107,255,.22),
-    inset 0 1px 1px rgba(255,255,255,.3);
-
-    transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .25s ease, color .25s ease;
-
-}
-
-
-.speed-toggle-btn:hover{
-
-    transform:scale(1.08);
-
-    box-shadow:
-    0 14px 32px rgba(0,0,0,.5),
-    0 0 28px var(--accent),
-    inset 0 1px 1px rgba(255,255,255,.4);
-
-}
-
-
-.speed-toggle-btn:active{
-
-    transform:scale(.94);
-
-}
-
-
-.speed-toggle-icon .eye-open{
-
-    transition: opacity .25s ease;
-
-}
-
-
-.speed-toggle-icon .eye-slash{
-
-    opacity:0;
-    stroke-dasharray:26;
-    stroke-dashoffset:26;
-    transition: opacity .25s ease, stroke-dashoffset .35s cubic-bezier(.4,0,.2,1);
-
-}
-
-
-/* when collapsed, cross the eye out — the pupil fades so the slash reads clearly */
-.speed-toggle-btn.is-collapsed .eye-open{
-
-    opacity:.35;
-
-}
-
-
-.speed-toggle-btn.is-collapsed .eye-slash{
-
-    opacity:1;
-    stroke-dashoffset:0;
 
 }
 
@@ -394,7 +272,7 @@ GLASS BUTTONS
 
     font-size:14px;
     color: rgba(255,255,255,.85);
-    text-shadow: 0 0 8px rgba(155,107,255,.35);
+    text-shadow: 0 0 8px rgba(0,212,255,.35);
 
 }
 
@@ -407,7 +285,7 @@ GLASS BUTTONS
 
     accent-color:var(--accent);
 
-    filter: drop-shadow(0 0 6px rgba(155,107,255,.6));
+    filter: drop-shadow(0 0 6px rgba(0,212,255,.6));
 
 }
 
@@ -473,7 +351,7 @@ PROPERTIES GLASS CARD
 
     border:
 
-    1px solid rgba(155,107,255,.55);
+    1px solid rgba(0,212,255,.55);
     border-top: 1px solid rgba(255,255,255,.6);
 
 
@@ -488,7 +366,7 @@ PROPERTIES GLASS CARD
     0 30px 80px rgba(0,0,0,.75),
 
 
-    0 0 45px rgba(155,107,255,.35),
+    0 0 45px rgba(0,212,255,.35),
 
     inset 0 1px 1px rgba(255,255,255,.4),
     inset 0 -25px 40px rgba(0,0,0,.35),
@@ -499,7 +377,7 @@ PROPERTIES GLASS CARD
     overflow:hidden;
 
 
-    transition: transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s ease, opacity .35s ease;
+    transition: transform .35s ease, box-shadow .35s ease;
 
 
 }
@@ -512,100 +390,11 @@ PROPERTIES GLASS CARD
     box-shadow:
 
     0 36px 90px rgba(0,0,0,.8),
-    0 0 60px rgba(155,107,255,.45),
+    0 0 60px rgba(0,212,255,.45),
     inset 0 1px 1px rgba(255,255,255,.45),
     inset 0 -25px 40px rgba(0,0,0,.35),
     inset 0 0 40px rgba(255,255,255,.08);
 
-}
-
-
-/* user can hide the panel on demand — kept independent of the
-   JS "display:block/none" state so the two never fight */
-
-.properties-panel.collapsed{
-
-    transform: translateX(24px) scale(.94);
-    opacity:0;
-    pointer-events:none;
-
-    transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .3s ease;
-
-}
-
-
-/* floating pill that toggles the panel */
-
-.panel-toggle-btn{
-
-    position:absolute;
-
-    right:calc(35px + env(safe-area-inset-right));
-    bottom:calc(35px + env(safe-area-inset-bottom));
-
-    z-index:31;
-
-    width:48px;
-    height:48px;
-
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    font-size:19px;
-    color:white;
-
-    background:
-    linear-gradient(160deg, rgba(30,45,80,.6), rgba(10,16,32,.7));
-
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-
-    border:1px solid rgba(155,107,255,.55);
-    border-top:1px solid rgba(255,255,255,.6);
-
-    box-shadow:
-    0 12px 28px rgba(0,0,0,.5),
-    0 0 22px rgba(155,107,255,.3),
-    inset 0 1px 1px rgba(255,255,255,.3);
-
-    transition: transform .3s cubic-bezier(.4,0,.2,1), bottom .4s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
-}
-
-.panel-toggle-btn:hover{
-
-    transform:scale(1.08);
-
-    box-shadow:
-    0 16px 34px rgba(0,0,0,.55),
-    0 0 32px var(--accent),
-    inset 0 1px 1px rgba(255,255,255,.4);
-
-}
-
-.panel-toggle-btn:active{
-    transform:scale(.96);
-}
-
-.panel-toggle-btn .toggle-icon{
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
-    display:inline-block;
-}
-
-/* when the panel is hidden, drop the button down to where the
-   panel used to be so it doesn't float awkwardly in empty space,
-   and flip the arrow to show it now "opens" rather than "closes" */
-
-.panel-toggle-btn.panel-hidden{
-    bottom:calc(35px + env(safe-area-inset-bottom));
-}
-
-.panel-toggle-btn.panel-hidden .toggle-icon{
-    transform: rotate(180deg);
 }
 
 
@@ -652,7 +441,7 @@ PROPERTIES GLASS CARD
     position:absolute;
     left:0; right:0; bottom:0;
     height:45%;
-    background: linear-gradient(0deg, rgba(155,107,255,.10), transparent);
+    background: linear-gradient(0deg, rgba(0,212,255,.10), transparent);
     pointer-events:none;
 
 }
@@ -681,7 +470,10 @@ PROPERTIES GLASS CARD
 
     font-weight:800;
 
-    color: rgba(255,255,255,.94);
+    background: linear-gradient(135deg, var(--accent-2), var(--accent) 60%, var(--accent-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 
     letter-spacing:4px;
 
@@ -692,9 +484,10 @@ PROPERTIES GLASS CARD
     text-shadow:
 
 
-    0 0 25px rgba(155,107,255,.55);
+    0 0 25px rgba(0,212,255,.55);
 
     filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
+
 
 }
 
@@ -725,34 +518,9 @@ PROPERTIES GLASS CARD
 
 }
 
-/* every time the panel content is rebuilt (new element picked)
-   these freshly-created nodes fade/slide in on their own — no
-   JS animation loop needed, the browser plays it automatically
-   whenever new elements enter the DOM */
-
-.panel-fade{
-    animation: panelFadeIn .45s cubic-bezier(.2,.8,.2,1) both;
-}
-
-.panel-fade .properties-item{
-    animation: panelFadeIn .4s cubic-bezier(.2,.8,.2,1) both;
-}
-
-.panel-fade .properties-item:nth-of-type(1){ animation-delay:.04s; }
-.panel-fade .properties-item:nth-of-type(2){ animation-delay:.08s; }
-.panel-fade .properties-item:nth-of-type(3){ animation-delay:.12s; }
-.panel-fade .properties-item:nth-of-type(4){ animation-delay:.16s; }
-.panel-fade .properties-item:nth-of-type(5){ animation-delay:.20s; }
-.panel-fade .properties-item:nth-of-type(6){ animation-delay:.24s; }
-
-@keyframes panelFadeIn{
-    from{ opacity:0; transform:translateY(8px); }
-    to{ opacity:1; transform:translateY(0); }
-}
-
 .properties-item:hover{
 
-    background: linear-gradient(90deg, rgba(155,107,255,.08), transparent);
+    background: linear-gradient(90deg, rgba(0,212,255,.08), transparent);
 
 }
 
@@ -831,9 +599,9 @@ WELCOME SCREEN
     text-shadow:
 
 
-    0 0 20px #9b6bff,
+    0 0 20px #00d4ff,
 
-    0 0 50px #9b6bff;
+    0 0 50px #00d4ff;
 
 
 }
@@ -850,7 +618,7 @@ WELCOME SCREEN
     background-clip: text;
     color: transparent;
 
-    filter: drop-shadow(0 0 18px rgba(155,107,255,.6));
+    filter: drop-shadow(0 0 18px rgba(0,212,255,.6));
 
 }
 
@@ -901,25 +669,25 @@ WELCOME SCREEN
 
     background:
 
-    radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), rgba(155,107,255,.15) 55%, rgba(60,22,112,.25));
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), rgba(0,212,255,.15) 55%, rgba(0,144,201,.25));
 
-    color:#9b6bff;
+    color:#00d4ff;
 
 
     border:
 
-    2px solid #9b6bff;
+    2px solid #00d4ff;
     border-top: 2px solid rgba(255,255,255,.8);
 
 
     box-shadow:
 
 
-    0 0 40px #9b6bff,
+    0 0 40px #00d4ff,
     0 18px 40px rgba(0,0,0,.5),
     inset 0 6px 14px rgba(255,255,255,.35),
     inset 0 -14px 24px rgba(0,90,130,.5),
-    inset 0 0 30px #9b6bff;
+    inset 0 0 30px #00d4ff;
 
 
 
@@ -1035,16 +803,6 @@ MOBILE
 }
 
 
-.speed-control-wrap{
-
-    left:calc(14px + env(safe-area-inset-left));
-    bottom:calc(14px + env(safe-area-inset-bottom));
-
-    gap:8px;
-
-}
-
-
 .speedControl{
 
     padding:10px 16px;
@@ -1067,14 +825,6 @@ MOBILE
 }
 
 
-.speed-toggle-btn{
-
-    width:44px;
-    height:44px;
-
-}
-
-
 .properties-panel{
 
 
@@ -1087,18 +837,6 @@ MOBILE
 
     padding:20px;
 
-
-}
-
-
-.panel-toggle-btn{
-
-    right:calc(16px + env(safe-area-inset-right));
-    bottom:calc(16px + env(safe-area-inset-bottom));
-
-    width:44px;
-    height:44px;
-    font-size:17px;
 
 }
 
@@ -1188,9 +926,3 @@ MOBILE
     #welcomeScreen p{ font-size:14px; }
 
 }
-<<<<<<< HEAD
-=======
-
-.lp-char { display: inline; transition: color .12s ease; }
-
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b

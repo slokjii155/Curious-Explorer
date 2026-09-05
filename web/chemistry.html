@@ -22,7 +22,10 @@
     --accent-2:#cbb6ff;
     --accent-deep:#3c1670;
     --accent-blue:#5b8cff;
+<<<<<<< HEAD
     --accent-teal:#57e0c2;
+=======
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 
     --font-display:'Sora', 'Segoe UI', sans-serif;
     --font-body:'Inter', 'Segoe UI', sans-serif;
@@ -718,6 +721,7 @@ body{
 }
 
 /* ================= 3D Atom Logo (unchanged behaviour) =================
+<<<<<<< HEAD
    Now used inside the Visualizer card's display case
    (.mc-visualizer .mc-stage .atom-stage--sm). */
 
@@ -730,12 +734,35 @@ body{
 }
 
 .mc-visualizer .mc-stage .atom-core{
+=======
+   Now used inside the Visualizer card (.mc-visualizer .atom-stage--sm)
+   instead of the old standalone side panel. */
+
+.mc-visual{
+    display:flex;
+    justify-content:center;
+}
+
+/* Scoped to .mc-visual so this always wins over the base .atom-stage
+   sizing below, regardless of stylesheet order. */
+.mc-visual .atom-stage{
+    width:64px;
+    height:64px;
+    margin:0 0 6px;
+}
+
+.mc-visual .atom-core{
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     width:16px;
     height:16px;
     margin:-8px 0 0 -8px;
 }
 
+<<<<<<< HEAD
 .mc-visualizer .mc-stage .ring{
+=======
+.mc-visual .ring{
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     width:64px;
     height:64px;
     margin:-32px 0 0 -32px;
@@ -844,6 +871,7 @@ body{
     animation: cardRise .9s .15s cubic-bezier(.2,.8,.2,1) both;
 }
 
+<<<<<<< HEAD
 /* ---- responsive grid: many per row on desktop, fewer on tablet,
    single column on mobile. Cards are capped at --mc-card-max so the
    grid gains columns instead of growing oversized cards on wide
@@ -1029,15 +1057,38 @@ body{
 
     display:flex;
     flex-direction:column;
+=======
+.models-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:18px;
+    margin-top:18px;
+}
+
+.model-card{
+    position:relative;
+
+    padding:22px 20px 20px;
+    border-radius:20px;
+
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
     text-align:left;
     text-decoration:none;
     color:inherit;
 
+<<<<<<< HEAD
     background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(9,18,38,.58) 45%, rgba(5,10,24,.74));
+=======
+    background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(9,18,38,.55) 45%, rgba(5,10,24,.7));
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
 
+<<<<<<< HEAD
     border:1px solid rgba(155,107,255,.32);
     border-top:1px solid rgba(255,255,255,.42);
 
@@ -1283,12 +1334,26 @@ body{
 
 /* -------- available card: lift, tilt, and glow follow the cursor -------- */
 
+=======
+    border:1px solid rgba(155,107,255,.35);
+    border-top:1px solid rgba(255,255,255,.45);
+
+    box-shadow:
+    0 18px 44px rgba(0,0,0,.55),
+    0 0 26px rgba(155,107,255,.14),
+    inset 0 1px 1px rgba(255,255,255,.22);
+
+    transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 .model-card.mc-active{
     cursor:pointer;
 }
 
 .model-card.mc-active:hover,
 .model-card.mc-active:focus-visible{
+<<<<<<< HEAD
     transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateY(-7px) scale(1.015);
     border-color: color-mix(in srgb, var(--card-accent) 60%, rgba(255,255,255,.55));
     box-shadow:
@@ -1311,10 +1376,21 @@ body{
 
 /* -------- coming-soon card: same case, deliberately quieter -------- */
 
+=======
+    transform:translateY(-5px);
+    border-color:rgba(155,107,255,.6);
+    box-shadow:
+    0 26px 58px rgba(0,0,0,.6),
+    0 0 36px rgba(155,107,255,.32),
+    inset 0 1px 1px rgba(255,255,255,.3);
+}
+
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 .model-card.mc-soon{
     cursor:default;
 }
 
+<<<<<<< HEAD
 .model-card.mc-soon .mc-preview{
     filter:grayscale(.55) brightness(.8);
 }
@@ -1343,10 +1419,92 @@ body{
 
 @media(max-width:1024px){
     .models-grid{ --mc-card-max: 280px; grid-template-columns:repeat(auto-fill, minmax(200px, var(--mc-card-max))); gap:16px; }
+=======
+.mc-icon{
+    font-size:24px;
+    line-height:1;
+}
+
+.mc-name{
+    font-family:var(--font-display);
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.3px;
+
+    color: rgba(255,255,255,.94);
+
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
+}
+
+.mc-desc{
+    font-size:12.5px;
+    line-height:1.5;
+    color:rgba(255,255,255,.65);
+    flex:1 0 auto;
+}
+
+.mc-items{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.mc-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+
+    padding:9px 12px;
+    border-radius:12px;
+
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09);
+}
+
+.mc-item-name{
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.1px;
+    color:rgba(255,255,255,.82);
+}
+
+/* subtle premium "coming soon" badge — muted on purpose so these never
+   read as clickable / functional */
+.mc-badge{
+    flex:0 0 auto;
+
+    font-family:var(--font-display);
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.7px;
+    text-transform:uppercase;
+    white-space:nowrap;
+
+    padding:4px 9px;
+    border-radius:999px;
+
+    color:rgba(255,255,255,.55);
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.16);
+}
+
+.model-card.mc-active .mc-badge{
+    color:#04121c;
+    background: linear-gradient(145deg, var(--accent-2), var(--accent) 70%);
+    border:1px solid rgba(255,255,255,.5);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.6);
+}
+
+.mc-launch{
+    margin-top:4px;
+    align-self:flex-start;
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 }
 
 @media(max-width:768px){
     .models-wrap{ order:3; width:100%; padding:20px 16px 18px; }
+<<<<<<< HEAD
     .models-grid{ grid-template-columns:repeat(2, minmax(0, var(--mc-card-max))); gap:14px; }
     .mc-preview{ height:108px; }
 }
@@ -1354,6 +1512,14 @@ body{
 @media(max-width:520px){
     .models-grid{ grid-template-columns:minmax(0, 1fr); }
     .model-card{ max-width:340px; }
+=======
+    .models-grid{ grid-template-columns:1fr 1fr; gap:12px; }
+    .model-card{ padding:18px 16px 16px; }
+}
+
+@media(max-width:520px){
+    .models-grid{ grid-template-columns:1fr; }
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 }
 
 /* ================= Responsive ================= */
@@ -1483,6 +1649,7 @@ body{
         <div class="pt-body" id="modelsBody">
           <div class="pt-body-inner">
 
+<<<<<<< HEAD
         <!-- Filters are metadata queries over the SAME centralized
              model dataset (./js/data/models3d.js) — they never hold
              their own copy of model data, only the option lists in
@@ -1558,6 +1725,80 @@ body{
                  Human Cell, Projectile Motion, Solar System, Chemical
                  Bonding, Human Heart, Magnetic Field) are appended here
                  by renderModelCards() at runtime. -->
+=======
+        <div class="models-grid">
+
+            <a class="model-card mc-active mc-visualizer" href="./explorer.html">
+                <div class="mc-visual">
+                    <div class="atom-stage atom-stage--sm">
+                        <div class="ring r1"><div class="e"></div></div>
+                        <div class="ring r2"><div class="e"></div></div>
+                        <div class="ring r3"><div class="e"></div></div>
+                        <div class="atom-core"></div>
+                    </div>
+                </div>
+                <div class="mc-icon">🧭</div>
+                <div class="mc-name">Visualizer</div>
+                <div class="mc-desc">Journey inside the atom. Explore the Bohr and Quantum Orbital models across the full periodic table in an interactive 3D universe.</div>
+                <div class="mc-items">
+                    <div class="mc-item">
+                        <span class="mc-item-name">⚛ Bohr Model</span>
+                        <span class="mc-badge">Included</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">☁ Quantum Model</span>
+                        <span class="mc-badge">Included</span>
+                    </div>
+                </div>
+                <span class="mc-badge mc-launch">Open Visualizer →</span>
+            </a>
+
+            <div class="model-card mc-soon">
+                <div class="mc-icon">🧬</div>
+                <div class="mc-name">Molecular Models</div>
+                <div class="mc-items">
+                    <div class="mc-item">
+                        <span class="mc-item-name">Molecule Explorer</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Lewis Structures</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Molecular Geometry</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Molecular Builder</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="model-card mc-soon">
+                <div class="mc-icon">🔗</div>
+                <div class="mc-name">Bonding Models</div>
+                <div class="mc-items">
+                    <div class="mc-item">
+                        <span class="mc-item-name">Ionic Bonding</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Covalent Bonding</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Metallic Bonding</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                    <div class="mc-item">
+                        <span class="mc-item-name">Bond Polarity</span>
+                        <span class="mc-badge">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 
         </div>
 
@@ -1580,8 +1821,11 @@ body{
 <script type="module">
 
 import { ELEMENTS } from "./js/elements.js";
+<<<<<<< HEAD
 import { getModelById, filterModels, sortModels } from "./js/data/models3d.js";
 import { SUBJECTS, CLASS_OPTIONS, getTopicOptions } from "./js/data/filterTaxonomy.js";
+=======
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 
 //====================================================
 // Build the periodic table grid from the SAME element
@@ -1968,6 +2212,7 @@ modelsToggleBtn.addEventListener("click", ()=>{
 });
 
 //====================================================
+<<<<<<< HEAD
 // Render 3D Models grid from the centralized model data
 // (./js/data/models3d.js). One card per MODEL, never per
 // subject — see the "core rule" comment at the top of that
@@ -2335,6 +2580,8 @@ populateFilterOptions();
 renderModelCards();
 
 //====================================================
+=======
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
 // Subtle 3D parallax — desktop cursor + mobile touch
 // (lightweight, no extra libraries)
 //====================================================

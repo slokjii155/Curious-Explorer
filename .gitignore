@@ -1,7 +1,16 @@
 node_modules/
+<<<<<<< HEAD
 web/dist/
 .DS_Store
 *.log
 
 .vercel
 .env*
+=======
+dist/
+web/dist/
+out/
+.vscode/
+.DS_Store
+.vercel
+>>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
