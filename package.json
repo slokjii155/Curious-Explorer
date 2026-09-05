@@ -3,22 +3,15 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-
   "dependencies": {
     "three": "^0.185.1"
   },
-
   "devDependencies": {
     "vite": "^8.1.5"
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6de40b7a0643e1b7f9487bc4cc83bc4c1407627b
